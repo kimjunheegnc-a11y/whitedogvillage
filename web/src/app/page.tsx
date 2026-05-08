@@ -14,6 +14,10 @@ import { loadContentMap } from "@/lib/content-load";
 import { asText } from "@/lib/json-content";
 import { stock } from "@/lib/stock-photos";
 
+/** 홈만 예전 HTML이 CDN에 남는 경우 방지 */
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 const serviceLinks = [
   { href: "/bunyang", label: "분양", desc: "건강한 아이를 가족처럼" },
   { href: "/hotel", label: "호텔", desc: "안전한 돌봄 공간" },
@@ -25,11 +29,10 @@ const serviceLinks = [
 
 export default async function HomePage() {
   const map = await loadContentMap();
-  const heroTitle = asText(map["hero_title"], "가족처럼 사랑으로 분양한다");
-  const heroSub = asText(
-    map["hero_subtitle"],
-    "용인에서 분양·호텔·미용·간식까지 한곳에 모았습니다. 복잡한 설명 대신, 방문과 통화로 바로 이야기 나눌 수 있게 준비했습니다."
-  );
+  /** 홈 히어로는 기획 문구 고정 (Supabase hero_title 과 무관) */
+  const heroTitle = "가족처럼 사랑으로 분양한다";
+  const heroSub =
+    "용인에서 분양·호텔·미용·간식까지 한곳에 모았습니다. 복잡한 설명 대신, 방문과 통화로 바로 이야기 나눌 수 있게 준비했습니다.";
   const hours = asText(map["contact_hours"], DEFAULT_HOURS);
   const phone = asText(map["phone"], DEFAULT_PHONE);
   const address = asText(map["contact_address"], DEFAULT_ADDRESS);

@@ -15,9 +15,12 @@ const noto = Noto_Sans_KR({
   display: "swap",
 });
 
+const sha = process.env.VERCEL_GIT_COMMIT_SHA;
+
 export const metadata: Metadata = {
   title: `${SITE_NAME} | 반려동물 전문`,
   description: "분양, 호텔, 미용, 병원 제휴, 간식, 후기 — 하얀 개 마을",
+  ...(sha ? { other: { "deployment-git-sha": sha } } : {}),
 };
 
 export default async function RootLayout({
