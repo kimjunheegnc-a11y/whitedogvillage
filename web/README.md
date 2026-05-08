@@ -1,5 +1,7 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+**인수인계:** [`AI_CONTEXT.md`](./AI_CONTEXT.md) (맥락·기획) · [`HANDOFF.md`](./HANDOFF.md) (운영·환경)
+
 ## Getting Started
 
 First, run the development server:

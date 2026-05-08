@@ -1,5 +1,7 @@
 # 하얀 개 마을 웹 — 운영·연동 체크리스트
 
+**AI·인수인계:** 맥락·기획·담당자 작업 성향은 먼저 [`AI_CONTEXT.md`](./AI_CONTEXT.md)를 읽으세요. 이 파일은 **환경·SQL·배포** 위주입니다.
+
 프로젝트 코드는 `web/` 폴더에 있습니다. 로컬 실행: `cd web && npm install && npm run dev`
 
 로컬에서 환경만 점검할 때: `cd web && npm run check-env` (`.env.local` 없으면 `npm run setup-env` 또는 `cp .env.example .env.local`)
@@ -10,14 +12,16 @@
 
 | 변수 | 설명 |
 |------|------|
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase 프로젝트 URL |
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase 프로젝트 URL — **`https://프로젝트.supabase.co` 만** (끝에 `/rest/v1` 등 경로 붙이지 말 것. 코드가 오리진으로 정규화하지만 원본을 맞추는 것이 안전) |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | anon 키 (공개 클라이언트용) |
 | `SUPABASE_SERVICE_ROLE_KEY` | **서버 전용** service role 키. Git/브라우저에 노출 금지. |
-| `ADMIN_PASSWORD_HASH` | 관리자 비밀번호 bcrypt 해시. 생성: `cd web && npm run hash-password -- '원하는비밀번호'` |
+| `ADMIN_PASSWORD` | (선택) 관리자 **평문** 비밀번호. 입장 게이트 `SITE_GATE_PASSWORD`와 같은 방식. 있으면 bcrypt보다 **우선**. |
+| `ADMIN_PASSWORD_HASH` | (선택) bcrypt 해시. 생성: `cd web && npm run hash-password -- '원하는비밀번호'` |
 | `ADMIN_SESSION_SECRET` | **32자 이상** 임의 문자열 (세션 JWT 서명) |
+| `NEXT_PUBLIC_KAKAO_CHAT_URL` | (선택) 카카오 채널 채팅 URL. 챗봇·헤더·예약 링크에 사용. 비우면 placeholder |
 | `OWNER_EMAIL` | 예약·문의 알림을 받을 사장님 이메일 |
 | `SMTP_*` | 이메일 발송용 (비우면 메일 단계는 스킵되고 콘솔에 경고만 출력) |
-| `GOOGLE_*` | 캘린더 연동 (비우면 일정 생성 스킵) |
+| `GOOGLE_*` | 캘린더 연동 (비우면 일정 생성 스킵; 실패해도 예약 DB insert는 유지됨) |
 
 ## 2. Supabase SQL (한 파일만 실행)
 
@@ -31,17 +35,23 @@ Supabase 대시보드 → **SQL Editor** → New query → 아래 파일 **전�
 
 > 참고: `migrations/001_initial.sql`은 동일 스키마의 분할본입니다. **새로 셋업할 때는 `SUPABASE_ALL_IN_ONE.sql`만** 쓰면 됩니다.
 
-## 3. 관리자 비밀번호 변경
+예약이 어드민에 안 보일 때: [`web/supabase/DIAGNOSTIC_RESERVATIONS.sql`](web/supabase/DIAGNOSTIC_RESERVATIONS.sql) 을 SQL Editor에서 실행.
 
-1. 터미널에서 `npm run hash-password -- '새비밀번호'`
-2. 출력된 해시를 `ADMIN_PASSWORD_HASH`에 붙여넣기
-3. 서버 재시작
+## 3. 관리자 비밀번호
 
-**Vercel:** `ADMIN_PASSWORD_HASH`에는 터미널 출력 그대로 `$2b$10$...`만 넣습니다. **앞뒤 따옴표 없이**, 로컬용 `\$` 이스케이프는 넣지 마세요(코드가 `\$`를 보정하지만, Vercel에 그대로 `$`로 넣는 편이 안전합니다). `ADMIN_SESSION_SECRET`은 **32자 이상**인지 함께 확인하세요.
+**평문:** Vercel·로컬에 `ADMIN_PASSWORD=원하는비번` (입장 게이트와 동일한 운영 방식)
+
+**bcrypt:** 터미널에서 `npm run hash-password -- '새비밀번호'` → 출력 한 줄을 `ADMIN_PASSWORD_HASH`에 넣기.
+
+둘 다 있으면 **`ADMIN_PASSWORD`가 우선**입니다.
+
+**Vercel:** bcrypt는 터미널 출력 그대로 `$2b$10$...`만 넣습니다. **앞뒤 따옴표 없이**, 로컬용 `\$` 이스케이프는 Vercel에는 불필요합니다. `ADMIN_SESSION_SECRET`은 **32자 이상**인지 함께 확인하세요.
 
 ## 4. 카카오톡 버튼 URL
 
-준비되면 `web/src/lib/constants.ts`의 `KAKAO_PLACEHOLDER_HREF`를 실제 채널 채팅 URL로 바꾸거나, 관리자에서 별도 필드를 두고 싶으면 `content_blocks`에 키를 추가해 연동할 수 있습니다.
+**권장:** 환경 변수 `NEXT_PUBLIC_KAKAO_CHAT_URL` 에 실제 채널 채팅 URL.
+
+코드 폴백: `web/src/lib/constants.ts`의 `KAKAO_PLACEHOLDER_HREF` (미설정 시 `#`).
 
 ## 5. Google Calendar (선택)
 
