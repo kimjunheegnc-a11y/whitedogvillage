@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { ADMIN_SESSION_COOKIE } from "@/lib/admin-cookie";
+import { normalizeAdminPasswordHash } from "@/lib/admin-password-hash";
 import { signAdminSession } from "@/lib/session";
 
 export async function POST(req: Request) {
@@ -11,12 +12,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  const hash = process.env.ADMIN_PASSWORD_HASH;
+  const hash = normalizeAdminPasswordHash(process.env.ADMIN_PASSWORD_HASH);
   if (!hash) {
     return NextResponse.json({ error: "ADMIN_PASSWORD_HASH not configured" }, { status: 500 });
   }
 
-  const password = body.password ?? "";
+  const password = String(body.password ?? "").trim();
   const ok = bcrypt.compareSync(password, hash);
   if (!ok) {
     return NextResponse.json({ error: "비밀번호가 올바르지 않습니다." }, { status: 401 });

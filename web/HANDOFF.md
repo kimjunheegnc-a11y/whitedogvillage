@@ -35,6 +35,8 @@ Supabase 대시보드 → **SQL Editor** → New query → 아래 파일 **전�
 2. 출력된 해시를 `ADMIN_PASSWORD_HASH`에 붙여넣기
 3. 서버 재시작
 
+**Vercel:** `ADMIN_PASSWORD_HASH`에는 터미널 출력 그대로 `$2b$10$...`만 넣습니다. **앞뒤 따옴표 없이**, 로컬용 `\$` 이스케이프는 넣지 마세요(코드가 `\$`를 보정하지만, Vercel에 그대로 `$`로 넣는 편이 안전합니다). `ADMIN_SESSION_SECRET`은 **32자 이상**인지 함께 확인하세요.
+
 ## 4. 카카오톡 버튼 URL
 
 준비되면 `web/src/lib/constants.ts`의 `KAKAO_PLACEHOLDER_HREF`를 실제 채널 채팅 URL로 바꾸거나, 관리자에서 별도 필드를 두고 싶으면 `content_blocks`에 키를 추가해 연동할 수 있습니다.
