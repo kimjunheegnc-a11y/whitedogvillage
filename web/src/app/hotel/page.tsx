@@ -123,9 +123,9 @@ export default function HotelPage() {
             </p>
             <Link
               href="/hotel/book"
-              className="mt-6 inline-flex w-full justify-center rounded-2xl bg-[var(--text)] py-3 text-sm font-semibold text-white hover:opacity-90"
+              className="mt-6 inline-flex w-full items-center justify-center rounded-2xl bg-accent py-3 text-sm font-semibold shadow-sm hover:bg-accent-dark"
             >
-              호텔 예약하기
+              <span className="text-white">호텔 예약하기</span>
             </Link>
           </PlateCard>
         </div>

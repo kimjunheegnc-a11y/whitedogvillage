@@ -120,9 +120,9 @@ export default function SnacksPage() {
         <p className="mt-10 flex flex-wrap justify-center gap-3">
           <Link
             href="/snacks/reserve"
-            className="inline-flex rounded-2xl bg-[var(--text)] px-8 py-3.5 text-sm font-semibold text-white hover:opacity-90"
+            className="inline-flex items-center justify-center rounded-2xl bg-accent px-8 py-3.5 text-sm font-semibold shadow-sm hover:bg-accent-dark"
           >
-            간식 담아두기
+            <span className="text-white">간식 담아두기</span>
           </Link>
           <Link
             href="/snacks/contact"

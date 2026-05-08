@@ -37,6 +37,11 @@ a {
   color: inherit;
 }
 
+/* Next.js <Link>는 a 태그라, inherit이 Tailwind text-white보다 뒤에서 이기는 경우가 있음 */
+a.text-white {
+  color: #fff;
+}
+
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }

@@ -114,9 +114,9 @@ export default function GroomingPage() {
         <p className="mt-10 text-center">
           <Link
             href="/grooming/book"
-            className="inline-flex rounded-2xl bg-[var(--text)] px-8 py-3.5 text-sm font-semibold text-white hover:opacity-90"
+            className="inline-flex items-center justify-center rounded-2xl bg-accent px-8 py-3.5 text-sm font-semibold shadow-sm hover:bg-accent-dark"
           >
-            미용 예약하기
+            <span className="text-white">미용 예약하기</span>
           </Link>
         </p>
       </PlateSection>

@@ -53,9 +53,9 @@ export default function BunyangPage() {
         <div className="mt-10 flex flex-wrap justify-center gap-3">
           <Link
             href="/bunyang/book"
-            className="inline-flex rounded-2xl bg-[var(--text)] px-8 py-3.5 text-sm font-semibold text-white hover:opacity-90"
+            className="inline-flex items-center justify-center rounded-2xl bg-accent px-8 py-3.5 text-sm font-semibold shadow-sm hover:bg-accent-dark"
           >
-            상담·예약
+            <span className="text-white">상담·예약</span>
           </Link>
           <a
             href={KAKAO_PLACEHOLDER_HREF}
