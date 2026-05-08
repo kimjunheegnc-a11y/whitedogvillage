@@ -31,6 +31,8 @@ git branch -M main
 git push -u origin main
 ```
 
+GitHub 인증이 필요합니다. [GitHub CLI](https://cli.github.com) `gh auth login` 후 다시 푸시하거나, SSH를 쓰려면 `git remote set-url origin git@github.com:kimjunheegnc-a11y/whitedogvillage.git` 로 바꾼 뒤 푸시하세요.
+
 **다른 PC**에서는 `git clone https://github.com/kimjunheegnc-a11y/whitedogvillage.git` 후 `cd web && npm install` 하면 됩니다.
 
 **Vercel**
