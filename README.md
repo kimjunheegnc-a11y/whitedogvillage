@@ -6,8 +6,10 @@ Next.js 앱은 **`web/`** 디렉터리에 있습니다.
 
 ```bash
 cd web
-cp .env.example .env.local
-# .env.local 편집 후
+# .env.local 이 없을 때만 (있으면 건너뜀)
+npm run setup-env
+# 키를 채운 뒤 점검 — 비밀번호까지 확인: npm run check-env -- '0000'
+npm run check-env
 npm install
 npm run dev
 ```

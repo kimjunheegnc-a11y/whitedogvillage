@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "hash-password": "node scripts/hash-password.mjs"
+    "hash-password": "node scripts/hash-password.mjs",
+    "check-env": "node scripts/check-local-env.mjs",
+    "setup-env": "node scripts/setup-local-env.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.10.3",

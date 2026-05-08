@@ -2,6 +2,8 @@
 
 프로젝트 코드는 `web/` 폴더에 있습니다. 로컬 실행: `cd web && npm install && npm run dev`
 
+로컬에서 환경만 점검할 때: `cd web && npm run check-env` (`.env.local` 없으면 `npm run setup-env` 또는 `cp .env.example .env.local`)
+
 ## 1. 환경 변수 (`.env.local`)
 
 `web/.env.example`을 복사해 `.env.local`을 만들고 값을 채웁니다.
