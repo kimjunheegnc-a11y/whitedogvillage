@@ -16,19 +16,24 @@ export async function createReservationCalendarEvent(params: {
     return { eventId: null as string | null, skipped: true as const };
   }
 
-  const oauth2 = new google.auth.OAuth2(clientId, clientSecret);
-  oauth2.setCredentials({ refresh_token: refreshToken });
+  try {
+    const oauth2 = new google.auth.OAuth2(clientId, clientSecret);
+    oauth2.setCredentials({ refresh_token: refreshToken });
 
-  const calendar = google.calendar({ version: "v3", auth: oauth2 });
-  const res = await calendar.events.insert({
-    calendarId,
-    requestBody: {
-      summary: params.title,
-      description: params.description,
-      start: { dateTime: params.start.toISOString(), timeZone: "Asia/Seoul" },
-      end: { dateTime: params.end.toISOString(), timeZone: "Asia/Seoul" },
-    },
-  });
+    const calendar = google.calendar({ version: "v3", auth: oauth2 });
+    const res = await calendar.events.insert({
+      calendarId,
+      requestBody: {
+        summary: params.title,
+        description: params.description,
+        start: { dateTime: params.start.toISOString(), timeZone: "Asia/Seoul" },
+        end: { dateTime: params.end.toISOString(), timeZone: "Asia/Seoul" },
+      },
+    });
 
-  return { eventId: res.data.id ?? null, skipped: false as const };
+    return { eventId: res.data.id ?? null, skipped: false as const };
+  } catch (e) {
+    console.warn("[gcal] calendar.events.insert failed (예약은 이미 저장됨):", e);
+    return { eventId: null as string | null, skipped: true as const };
+  }
 }

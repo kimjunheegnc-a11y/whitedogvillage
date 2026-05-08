@@ -1,10 +1,11 @@
 import { createBrowserClient } from "@supabase/ssr";
+import { normalizeSupabaseProjectUrl } from "@/lib/supabase/normalize-project-url";
 
 export function createBrowserSupabase() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!url || !key) {
-    throw new Error("Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY");
+  if (!key) {
+    throw new Error("Missing NEXT_PUBLIC_SUPABASE_ANON_KEY");
   }
+  const url = normalizeSupabaseProjectUrl(process.env.NEXT_PUBLIC_SUPABASE_URL);
   return createBrowserClient(url, key);
 }

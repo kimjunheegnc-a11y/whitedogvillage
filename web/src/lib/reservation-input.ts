@@ -98,5 +98,8 @@ export function supabaseUserHint(code: string | undefined, message: string): str
   if (code === "42501" || message.toLowerCase().includes("permission") || message.includes("RLS"))
     return "서버에 설정된 SUPABASE_SERVICE_ROLE_KEY(service_role)를 확인해 주세요.";
   if (code === "PGRST116") return "저장 직후 응답을 받지 못했습니다. 잠시 후 목록에서 확인하거나 다시 시도해 주세요.";
+  if (/invalid path/i.test(message)) {
+    return "Supabase URL이 잘못되었을 수 있습니다. Vercel의 NEXT_PUBLIC_SUPABASE_URL 은 https://프로젝트.supabase.co 형태만 넣고(/rest/v1 없이) 저장 후 다시 배포해 주세요.";
+  }
   return message.length > 200 ? `${message.slice(0, 200)}…` : message;
 }

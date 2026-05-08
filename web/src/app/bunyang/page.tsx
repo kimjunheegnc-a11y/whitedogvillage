@@ -1,10 +1,8 @@
-import Image from "next/image";
 import Link from "next/link";
 import { AdoptionPuppyCards } from "@/components/bunyang/AdoptionPuppyCards";
 import { PlateCard, PlateSection } from "@/components/ui/PlateSection";
 import { ADOPTION_PUPPIES } from "@/lib/adoption-puppies";
 import { KAKAO_CHAT_HREF } from "@/lib/constants";
-import { stock } from "@/lib/stock-photos";
 
 export default function BunyangPage() {
   return (
@@ -15,32 +13,6 @@ export default function BunyangPage() {
         description="데모용 예시 카드 4건입니다. 실제 분양 시에는 사진·검진 기록이 업데이트됩니다."
       >
         <AdoptionPuppyCards puppies={ADOPTION_PUPPIES} />
-      </PlateSection>
-
-      <PlateSection
-        id="brush"
-        eyebrow="HOME CARE"
-        title="집에서의 브러싱 · 솔 준비"
-        description="입가 후 털 관리 습관을 같이 잡아 주세요. (이미지는 예시입니다.)"
-      >
-        <div className="grid items-center gap-8 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
-          <div className="relative aspect-[16/10] w-full overflow-hidden rounded-3xl border border-[var(--border)]">
-            <Image
-              src={stock.bunyangBrushCare}
-              alt="브러시·용품과 반려견"
-              fill
-              className="object-cover"
-              sizes="(max-width:768px) 100vw, 55vw"
-            />
-          </div>
-          <PlateCard>
-            <ul className="list-disc space-y-2 pl-4 text-sm leading-relaxed text-muted">
-              <li>슬리커 브러시(솔)로 표면부터 가볍게, 매트는 천천히 풀어 주세요.</li>
-              <li>목욕 주기는 피모 타입에 맞춰 상담 시 안내드린 스케줄을 권장합니다.</li>
-              <li>낯선 소리·도구에 익숙해지도록 간식 보상과 짧은 세션으로 시작해 보세요.</li>
-            </ul>
-          </PlateCard>
-        </div>
       </PlateSection>
 
       <PlateSection

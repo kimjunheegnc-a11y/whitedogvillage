@@ -41,7 +41,13 @@ export default function HospitalPage() {
       <PlateSection id="vet" eyebrow="VET" title="수의사 소개" description="제휴 병원 담당 선생님 프로필 예시입니다.">
         <div className="grid items-center gap-8 md:grid-cols-[240px_1fr]">
           <div className="relative aspect-[3/4] w-full max-w-[240px] overflow-hidden rounded-3xl border border-[var(--border)]">
-            <Image src={stock.vetWithDog} alt="진료 중인 수의사와 반려견" fill className="object-cover" sizes="240px" />
+            <Image
+              src={stock.vetWithDog}
+              alt="진료실에서 반려동물을 살피는 수의 진료 모습"
+              fill
+              className="object-cover"
+              sizes="240px"
+            />
           </div>
           <PlateCard>
             <p className="text-sm font-bold text-[var(--text)]">김OO 수의사</p>
