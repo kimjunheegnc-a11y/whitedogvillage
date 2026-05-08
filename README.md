@@ -44,6 +44,7 @@ GitHub 인증이 필요합니다. [GitHub CLI](https://cli.github.com) `gh auth 
 3. Environment Variables에 `web/.env.example`에 나온 변수를 넣되, 로컬 전용 값은 Vercel에 복사:
    - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
    - `SUPABASE_SERVICE_ROLE_KEY`, `ADMIN_PASSWORD_HASH`, `ADMIN_SESSION_SECRET`
+   - **사전 오픈:** `SITE_GATE_PASSWORD=0000` (전체 사이트 입장 게이트). **정식 오픈 시 이 변수를 삭제하거나 비우면** 게이트가 꺼집니다.
    - 필요 시 `OWNER_EMAIL`, `SMTP_*`, `GOOGLE_*`, `NEXT_PUBLIC_APP_URL`(프로덕션 도메인)
 4. bcrypt 해시는 Vercel UI에 그대로 `$2b$10$...` 형태로 붙여넣어도 됩니다(로컬 `.env.local`처럼 `\$` 이스케이프 불필요).
 5. Deploy — 이후 `main` 푸시마다 자동 배포
