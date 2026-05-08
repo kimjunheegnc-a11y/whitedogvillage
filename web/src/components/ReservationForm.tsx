@@ -1,6 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import {
+  parseApiErrorPayload,
+  validateCustomerName,
+  validateNotes,
+  validatePhone,
+} from "@/lib/reservation-input";
 
 type ResType = "adoption" | "hotel" | "grooming";
 
@@ -17,11 +23,27 @@ export function ReservationForm({
   const [when, setWhen] = useState("");
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
-  const [msg, setMsg] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState<{ text: string; ok: boolean } | null>(null);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setMsg(null);
+    setFeedback(null);
+    const vName = validateCustomerName(name);
+    if (vName) {
+      setFeedback({ text: vName, ok: false });
+      return;
+    }
+    const vPhone = validatePhone(phone);
+    if (vPhone) {
+      setFeedback({ text: vPhone, ok: false });
+      return;
+    }
+    const vNotes = validateNotes(notes, 0);
+    if (vNotes) {
+      setFeedback({ text: vNotes, ok: false });
+      return;
+    }
+
     setLoading(true);
     try {
       const preferred_at =
@@ -31,23 +53,26 @@ export function ReservationForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           type,
-          customer_name: name,
+          customer_name: name.trim(),
           phone,
-          pet_info: pet,
+          pet_info: pet.trim(),
           preferred_at,
-          notes,
+          notes: notes.trim(),
         }),
       });
-      const data = (await res.json()) as { error?: string };
-      if (!res.ok) throw new Error(data.error ?? "전송 실패");
-      setMsg("접수되었습니다. 빠르게 연락드릴게요!");
+      const data = (await res.json()) as unknown;
+      if (!res.ok) throw new Error(parseApiErrorPayload(data));
+      setFeedback({ text: "접수되었습니다. 빠르게 연락드릴게요!", ok: true });
       setName("");
       setPhone("");
       setPet("");
       setWhen("");
       setNotes("");
     } catch (err) {
-      setMsg(err instanceof Error ? err.message : "오류가 발생했습니다.");
+      setFeedback({
+        text: err instanceof Error ? err.message : "오류가 발생했습니다.",
+        ok: false,
+      });
     } finally {
       setLoading(false);
     }
@@ -57,11 +82,11 @@ export function ReservationForm({
     <section className="mt-10 rounded-[2rem] border border-[var(--border)] bg-white/90 p-6 shadow-[var(--shadow)] ring-1 ring-white/70">
       <h2 className="text-lg font-extrabold text-[var(--accent-dark)]">{title}</h2>
       <p className="mt-1 text-sm text-muted">
-        아래 정보를 남겨주시면 확인 후 연락드립니다.
+        아래 정보를 남겨주시면 확인 후 연락드립니다. 연락처는 휴대폰·지역번호 형식으로 적어 주세요.
       </p>
       <form className="mt-6 grid gap-4" onSubmit={onSubmit}>
         <label className="grid gap-1 text-sm font-medium">
-          이름
+          이름 (2글자 이상)
           <input
             required
             className="rounded-xl border border-[var(--border)] bg-[color-mix(in_srgb,white_92%,var(--accent-2))] px-3 py-3 outline-none focus:ring-2 focus:ring-[color-mix(in_srgb,var(--accent)_35%,transparent)]"
@@ -74,6 +99,7 @@ export function ReservationForm({
           <input
             required
             inputMode="tel"
+            placeholder="010-1234-5678"
             className="rounded-xl border border-[var(--border)] bg-[color-mix(in_srgb,white_92%,var(--accent-2))] px-3 py-3 outline-none focus:ring-2 focus:ring-[color-mix(in_srgb,var(--accent)_35%,transparent)]"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
@@ -113,8 +139,14 @@ export function ReservationForm({
         >
           {loading ? "전송 중…" : "예약 접수하기"}
         </button>
-        {msg ? (
-          <p className="text-center text-sm font-semibold text-[var(--accent-dark)]">{msg}</p>
+        {feedback ? (
+          <p
+            className={`whitespace-pre-wrap text-center text-sm font-semibold ${
+              feedback.ok ? "text-green-800" : "text-red-700"
+            }`}
+          >
+            {feedback.text}
+          </p>
         ) : null}
       </form>
     </section>

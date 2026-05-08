@@ -2,6 +2,15 @@
 
 import { useCallback, useState } from "react";
 import { KAKAO_CHAT_HREF } from "@/lib/constants";
+import {
+  parseApiErrorPayload,
+  validateAgeText,
+  validateCustomerName,
+  validateNotes,
+  validatePetName,
+  validatePhone,
+  validatePreferredWhen,
+} from "@/lib/reservation-input";
 
 type ReserveKind = "adoption" | "hotel" | "grooming";
 type ReservePhase = "species" | "dog_size" | "age" | "sex_neuter" | "form";
@@ -16,14 +25,6 @@ const KIND_LABEL: Record<ReserveKind, string> = {
   hotel: "호텔 예약",
   grooming: "미용 예약",
 };
-
-function parseApiError(data: unknown): string {
-  if (data && typeof data === "object" && "error" in data) {
-    const e = (data as { error: unknown }).error;
-    if (typeof e === "string") return e;
-  }
-  return "전송 실패";
-}
 
 function KakaoPromo() {
   const isConfigured = KAKAO_CHAT_HREF.startsWith("http");
@@ -95,7 +96,7 @@ export function ChatbotWidget() {
   const [notes, setNotes] = useState("");
 
   const [loading, setLoading] = useState(false);
-  const [banner, setBanner] = useState<string | null>(null);
+  const [notice, setNotice] = useState<{ msg: string; ok: boolean } | null>(null);
 
   const resetWizardFields = useCallback(() => {
     setSpecies(null);
@@ -112,7 +113,7 @@ export function ChatbotWidget() {
   const reset = useCallback(() => {
     setFlow({ step: "menu" });
     resetWizardFields();
-    setBanner(null);
+    setNotice(null);
   }, [resetWizardFields]);
 
   function goBackReserve() {
@@ -141,9 +142,35 @@ export function ChatbotWidget() {
     }
   }
 
+  function collectReserveValidationErrors(): string[] {
+    const errs: string[] = [];
+    if (!species) errs.push("종(강아지/고양이) 정보가 없습니다. 처음부터 다시 선택해 주세요.");
+    if (species === "dog" && !dogSize) errs.push("체급을 선택해 주세요.");
+    const a = validateAgeText(ageText);
+    if (a) errs.push(a);
+    if (!sexNeuter.trim()) errs.push("성별·중성화를 선택해 주세요.");
+    const w = validatePreferredWhen(when);
+    if (w) errs.push(w);
+    const n = validateCustomerName(ownerName);
+    if (n) errs.push(n);
+    const p = validatePhone(phone);
+    if (p) errs.push(p);
+    const pet = validatePetName(petName);
+    if (pet) errs.push(pet);
+    const msg = validateNotes(notes, 5);
+    if (msg) errs.push(msg);
+    return errs;
+  }
+
   async function submitReservation(kind: ReserveKind) {
+    const errs = collectReserveValidationErrors();
+    if (errs.length) {
+      setNotice({ ok: false, msg: errs.join("\n") });
+      return;
+    }
+
     setLoading(true);
-    setBanner(null);
+    setNotice(null);
     try {
       const preferred_at =
         when.trim().length > 0 ? new Date(when).toISOString() : undefined;
@@ -159,48 +186,60 @@ export function ChatbotWidget() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           type: kind,
-          customer_name: ownerName,
+          customer_name: ownerName.trim(),
           phone,
           pet_info,
           preferred_at,
-          notes,
+          notes: notes.trim(),
         }),
       });
       const data = (await res.json()) as unknown;
-      if (!res.ok) throw new Error(parseApiError(data));
-      setBanner("예약이 접수되었습니다!");
+      if (!res.ok) throw new Error(parseApiErrorPayload(data));
+      setNotice({ ok: true, msg: "예약이 접수되었습니다!" });
       resetWizardFields();
       setFlow({ step: "menu" });
     } catch (e) {
-      setBanner(e instanceof Error ? e.message : "오류");
+      setNotice({ ok: false, msg: e instanceof Error ? e.message : "오류가 발생했습니다." });
     } finally {
       setLoading(false);
     }
   }
 
   async function submitInquiry() {
+    const errs: string[] = [];
+    const n = validateCustomerName(ownerName);
+    if (n) errs.push(n);
+    const p = validatePhone(phone);
+    if (p) errs.push(p);
+    const m = validateNotes(notes, 5);
+    if (m) errs.push(m);
+    if (errs.length) {
+      setNotice({ ok: false, msg: errs.join("\n") });
+      return;
+    }
+
     setLoading(true);
-    setBanner(null);
+    setNotice(null);
     try {
       const res = await fetch("/api/submit-inquiry", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           category: "기타 문의",
-          name: ownerName,
+          name: ownerName.trim(),
           phone,
-          message: notes.trim() || "(내용 없음)",
+          message: notes.trim(),
         }),
       });
       const data = (await res.json()) as unknown;
-      if (!res.ok) throw new Error(parseApiError(data));
-      setBanner("문의가 접수되었습니다!");
+      if (!res.ok) throw new Error(parseApiErrorPayload(data));
+      setNotice({ ok: true, msg: "문의가 접수되었습니다!" });
       setOwnerName("");
       setPhone("");
       setNotes("");
       setFlow({ step: "menu" });
     } catch (e) {
-      setBanner(e instanceof Error ? e.message : "오류");
+      setNotice({ ok: false, msg: e instanceof Error ? e.message : "오류가 발생했습니다." });
     } finally {
       setLoading(false);
     }
@@ -264,8 +303,16 @@ export function ChatbotWidget() {
               안녕하세요! 상담 분야를 골라주시면, 아이 정보를 간단히 여쭙고 접수 폼으로 연결해 드릴게요.
             </div>
 
-            {banner ? (
-              <div className="rounded-2xl bg-green-50 px-3 py-2 text-sm font-semibold text-green-800">{banner}</div>
+            {notice ? (
+              <div
+                className={
+                  notice.ok
+                    ? "rounded-2xl bg-green-50 px-3 py-2 text-sm font-semibold text-green-800"
+                    : "rounded-2xl border border-red-200 bg-red-50 px-3 py-2 text-sm font-semibold whitespace-pre-wrap text-red-900"
+                }
+              >
+                {notice.msg}
+              </div>
             ) : null}
 
             <KakaoPromo />
@@ -371,7 +418,15 @@ export function ChatbotWidget() {
                       type="button"
                       disabled={!ageText.trim()}
                       className="w-full rounded-full bg-accent py-2.5 text-sm font-bold text-white disabled:opacity-50"
-                      onClick={() => setFlow({ step: "reserve", kind: flow.kind, phase: "sex_neuter" })}
+                      onClick={() => {
+                        const err = validateAgeText(ageText);
+                        if (err) {
+                          setNotice({ ok: false, msg: err });
+                          return;
+                        }
+                        setNotice(null);
+                        setFlow({ step: "reserve", kind: flow.kind, phase: "sex_neuter" });
+                      }}
                     >
                       다음
                     </button>
@@ -418,6 +473,7 @@ export function ChatbotWidget() {
                       전화번호
                       <input
                         inputMode="tel"
+                        placeholder="010-1234-5678"
                         className="rounded-xl border border-[var(--border)] px-3 py-2"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
@@ -441,7 +497,7 @@ export function ChatbotWidget() {
                       />
                     </label>
                     <label className="grid gap-1 text-xs font-semibold">
-                      문의 내용
+                      문의 내용 (5글자 이상)
                       <textarea
                         rows={3}
                         className="rounded-xl border border-[var(--border)] px-3 py-2"
@@ -452,7 +508,7 @@ export function ChatbotWidget() {
                     </label>
                     <button
                       type="button"
-                      disabled={loading || !ownerName.trim() || !phone.trim()}
+                      disabled={loading}
                       onClick={() => submitReservation(flow.kind)}
                       className="w-full rounded-full bg-accent py-3 text-sm font-bold text-white disabled:opacity-50"
                     >
@@ -488,13 +544,14 @@ export function ChatbotWidget() {
                   연락처
                   <input
                     inputMode="tel"
+                    placeholder="010-1234-5678"
                     className="rounded-xl border border-[var(--border)] px-3 py-2"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                   />
                 </label>
                 <label className="grid gap-1 text-xs font-semibold">
-                  문의 내용
+                  문의 내용 (5글자 이상)
                   <textarea
                     rows={4}
                     className="rounded-xl border border-[var(--border)] px-3 py-2"
@@ -504,7 +561,7 @@ export function ChatbotWidget() {
                 </label>
                 <button
                   type="button"
-                  disabled={loading || !ownerName.trim() || !phone.trim()}
+                  disabled={loading}
                   onClick={() => submitInquiry()}
                   className="w-full rounded-full bg-accent py-3 text-sm font-bold text-white disabled:opacity-50"
                 >
