@@ -5,7 +5,7 @@
  */
 export function normalizeAdminPasswordHash(raw: string | undefined): string | null {
   if (!raw) return null;
-  let h = raw.trim();
+  let h = raw.replace(/^\uFEFF/, "").trim();
   if (
     (h.startsWith('"') && h.endsWith('"')) ||
     (h.startsWith("'") && h.endsWith("'"))

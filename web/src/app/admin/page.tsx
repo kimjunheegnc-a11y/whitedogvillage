@@ -19,8 +19,11 @@ export default function AdminLoginPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password }),
       });
-      const data = (await res.json()) as { error?: string };
-      if (!res.ok) throw new Error(data.error ?? "로그인 실패");
+      const data = (await res.json()) as { error?: string; hint?: string };
+      if (!res.ok) {
+        const msg = data.hint ? `${data.error ?? "오류"}\n\n${data.hint}` : (data.error ?? "로그인 실패");
+        throw new Error(msg);
+      }
       router.replace("/admin/dashboard");
       router.refresh();
     } catch (er) {
@@ -46,7 +49,11 @@ export default function AdminLoginPage() {
             required
           />
         </label>
-        {err ? <p className="text-sm text-red-600">{err}</p> : null}
+        {err ? (
+          <p className="whitespace-pre-wrap text-sm text-red-600" role="alert">
+            {err}
+          </p>
+        ) : null}
         <button
           type="submit"
           disabled={loading}
