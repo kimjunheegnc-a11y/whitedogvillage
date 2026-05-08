@@ -55,7 +55,7 @@ export default async function HomePage() {
     <div>
       <section className="relative overflow-hidden border-b border-[var(--border)]">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,color-mix(in_srgb,var(--accent-2)_55%,transparent),transparent_45%),radial-gradient(circle_at_80%_0%,color-mix(in_srgb,var(--accent)_35%,transparent),transparent_40%)]" />
-        <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-14 md:grid-cols-2">
+        <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-14 md:grid-cols-[minmax(0,1fr)_minmax(0,1.12fr)]">
           <div>
             <p className="text-xs font-bold uppercase tracking-wider text-[var(--accent-dark)]">WHITE DOG VILLAGE</p>
             <h1 className="mt-2 text-3xl font-extrabold leading-[1.15] text-[var(--text)] md:text-[2.35rem]">
@@ -93,16 +93,30 @@ export default async function HomePage() {
               </a>
             </p>
           </div>
-          <div className="relative flex justify-center">
-            <div className="absolute right-2 top-2 z-[1] rounded-2xl border border-[var(--border)] bg-white/90 px-3 py-2 text-[11px] font-bold text-[var(--accent-dark)] shadow-sm backdrop-blur sm:text-xs">
+          <div className="relative flex w-full justify-center md:justify-end">
+            <div className="absolute right-0 top-0 z-[1] rounded-2xl border border-[var(--border)] bg-white/90 px-3 py-2 text-[11px] font-bold text-[var(--accent-dark)] shadow-sm backdrop-blur sm:right-2 sm:text-xs">
               사랑으로 키워요
             </div>
-            <div className="grid max-w-md grid-cols-2 gap-4">
-              <div className="relative aspect-square overflow-hidden rounded-[2rem] shadow-[var(--shadow)] ring-4 ring-white">
-                <Image src={stock.puppy} alt="강아지" fill className="object-cover" sizes="(max-width:768px) 45vw, 280px" />
+            <div className="grid w-full max-w-[min(100%,22rem)] grid-cols-2 gap-4 sm:max-w-[min(100%,28rem)] sm:gap-5 md:max-w-none md:gap-6 md:pl-2">
+              <div className="relative aspect-square w-full overflow-hidden rounded-[2rem] shadow-[var(--shadow)] ring-4 ring-white">
+                <Image
+                  src={stock.puppy}
+                  alt="강아지"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width:640px) 42vw, (max-width:1024px) 38vw, 520px"
+                  priority
+                />
               </div>
-              <div className="relative mt-8 aspect-square overflow-hidden rounded-[2rem] shadow-[var(--shadow)] ring-4 ring-white">
-                <Image src={stock.kitten} alt="고양이" fill className="object-cover" sizes="(max-width:768px) 45vw, 280px" />
+              <div className="relative mt-6 aspect-square w-full overflow-hidden rounded-[2rem] shadow-[var(--shadow)] ring-4 ring-white sm:mt-8">
+                <Image
+                  src={stock.kitten}
+                  alt="고양이"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width:640px) 42vw, (max-width:1024px) 38vw, 520px"
+                  priority
+                />
               </div>
             </div>
           </div>
