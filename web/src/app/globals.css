@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #fff9fc;
+  --bg-2: #fff5f7;
+  --surface: #ffffff;
+  --accent: #e8a8c8;
+  --accent-2: #f6d4e6;
+  --accent-dark: #c77aa3;
+  --text: #3a3038;
+  --muted: #7a6d74;
+  --footer: #d9a4bf;
+  --border: #f1dce8;
+  --wave: #f3cfe0;
+  --shadow: 0 12px 40px rgba(199, 122, 163, 0.12);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-card: var(--surface);
+  --color-accent: var(--accent);
+  --color-accent-dark: var(--accent-dark);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-footer: var(--footer);
+  --font-sans: var(--font-noto);
+}
+
+body {
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 55%, var(--bg) 100%),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.7) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.55) 1px, transparent 1px);
+  background-size: auto, 28px 28px, 28px 28px;
+  background-blend-mode: normal, multiply, multiply;
+  color: var(--text);
+  min-height: 100dvh;
+}
+
+a {
+  color: inherit;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.wave-divider {
+  height: 14px;
+  background: radial-gradient(circle at 12px 0, transparent 12px, var(--wave) 13px) repeat-x;
+  background-size: 24px 14px;
+  opacity: 0.85;
+}
+
+.prose-pink p {
+  margin: 0 0 0.85rem;
+}
+.prose-pink ul {
+  margin: 0.5rem 0 0.85rem;
+  padding-left: 1.2rem;
+  list-style: disc;
+}
+.prose-pink li {
+  margin: 0.25rem 0;
+}
+.prose-pink strong {
+  color: var(--text);
+}
