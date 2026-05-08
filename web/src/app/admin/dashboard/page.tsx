@@ -30,7 +30,11 @@ export default async function AdminDashboardPage() {
   } catch {
     return (
       <div className="p-8 text-center text-red-600">
-        Supabase 서비스 키가 설정되지 않았습니다. `.env.local`을 확인하세요.
+        Supabase 서버 키가 없습니다. 환경 변수{" "}
+        <code className="rounded bg-neutral-100 px-1">SUPABASE_SERVICE_ROLE_KEY</code> 와{" "}
+        <code className="rounded bg-neutral-100 px-1">NEXT_PUBLIC_SUPABASE_URL</code>를 설정하세요.
+        로컬은 <code className="rounded bg-neutral-100 px-1">.env.local</code>, Vercel은 Project →
+        Settings → Environment Variables 에 추가한 뒤 Redeploy 하세요.
       </div>
     );
   }
