@@ -1,116 +1,125 @@
 import Image from "next/image";
 import Link from "next/link";
-import { BookingTeaser } from "@/components/service/BookingTeaser";
-import { NaturalCard } from "@/components/service/NaturalCard";
-import { ProseBlock } from "@/components/service/ProseBlock";
-import { loadContentMap } from "@/lib/content-load";
-import { asText } from "@/lib/json-content";
-import { KAKAO_PLACEHOLDER_HREF } from "@/lib/constants";
+import { PlateCard, PlateSection } from "@/components/ui/PlateSection";
 import { stock } from "@/lib/stock-photos";
 
-export default async function GroomingOverviewPage() {
-  const map = await loadContentMap();
-  const intro = asText(
-    map["page_grooming_intro"],
-    "전문 미용사가 아이의 피모 상태와 체형에 맞춰 부드럽게 케어합니다."
-  );
+const courses = [
+  { name: "베이직 클립", price: "3만 원대~", note: "목욕 · 드라이 · 클리핑 · 발톱" },
+  { name: "풀 코스", price: "5만 원대~", note: "베이직 + 귀 · 항문낭 · 기본 스포일링" },
+  { name: "스포일링", price: "별도 문의", note: "피모 상태에 맞춘 집중 케어" },
+];
 
+const breeds = [
+  { name: "소형 · 장모", tip: "일상 빗질 5분으로 엉킴 예방", src: stock.poodle },
+  { name: "중형 · 이중모", tip: "활동량에 맞춘 언더코트 케어", src: stock.shiba },
+  { name: "민감 피부", tip: "저자극 샴푸 · 시간 단축", src: stock.spaTowel },
+];
+
+export default function GroomingPage() {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-10">
-      <div className="grid gap-10 lg:grid-cols-[1fr,300px] lg:items-start">
-        <div className="space-y-10">
-          <div className="overflow-hidden rounded-[2rem] border border-[var(--border)] bg-white shadow-sm">
-            <div className="grid gap-0 md:grid-cols-2">
-              <div className="relative aspect-[5/4] min-h-[220px] w-full md:aspect-auto md:min-h-[320px]">
-                <Image src={stock.dogGroom} alt="미용 중인 강아지" fill className="object-cover" priority />
-              </div>
-              <div className="flex flex-col justify-center p-6 sm:p-8">
-                <p className="text-xs font-bold uppercase tracking-wider text-[var(--accent-dark)]">미용 안내</p>
-                <h2 className="mt-2 text-2xl font-extrabold text-[var(--text)]">부드러운 손길로 마무리까지</h2>
-                <p className="mt-4 text-sm leading-relaxed text-muted sm:text-base">{intro}</p>
-                <div className="mt-6 flex flex-wrap gap-2">
-                  {["#클리핑", "#목욕·드라이", "#발톱·귀", "#스포일링"].map((t) => (
-                    <span
-                      key={t}
-                      className="rounded-full bg-[color-mix(in_srgb,var(--accent-2)_55%,white)] px-3 py-1 text-xs font-semibold text-[var(--text)] ring-1 ring-[var(--border)]"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-                <div className="mt-6 flex flex-wrap gap-3">
-                  <Link
-                    href="/grooming/book"
-                    className="inline-flex items-center justify-center rounded-full bg-accent px-5 py-3 text-sm font-bold text-white shadow hover:bg-accent-dark"
-                  >
-                    예약하러 가기
-                  </Link>
-                  <a
-                    href={KAKAO_PLACEHOLDER_HREF}
-                    className="inline-flex items-center justify-center rounded-full border border-[var(--border)] bg-white px-5 py-3 text-sm font-bold text-[var(--text)] hover:bg-[color-mix(in_srgb,white_70%,var(--accent-2))]"
-                  >
-                    카카오 상담
-                  </a>
-                </div>
-              </div>
+    <div className="mx-auto max-w-5xl space-y-20 px-4 py-14">
+      <PlateSection
+        id="before-after"
+        eyebrow="BEFORE / AFTER"
+        title="비포 · 애프터"
+        description="정리 전·후 컨디션을 사진으로 남겨 드립니다. (이미지는 예시입니다.)"
+      >
+        <div className="grid gap-4 md:grid-cols-2">
+          <PlateCard className="p-0 overflow-hidden">
+            <div className="relative aspect-[4/3] w-full">
+              <Image src={stock.groomBefore} alt="미용 전" fill className="object-cover" sizes="(max-width:768px) 100vw, 50vw" />
             </div>
-          </div>
-
-          <div className="wave-divider" aria-hidden />
-
-          <div>
-            <h2 className="text-xl font-extrabold text-[var(--text)]">이런 분들께 추천해요</h2>
-            <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              <NaturalCard
-                href="/grooming/course"
-                title="클리핑 · 스타일링"
-                summary="털 엉킴이 걱정이거나 계절마다 스타일을 바꾸고 싶을 때, 컨디션에 맞춰 단계적으로 진행합니다."
-                imageSrc={stock.dogHappy}
-                imageAlt="미용 후 산책하는 강아지"
-              />
-              <NaturalCard
-                href="/grooming/safety"
-                title="위생·피부 케어"
-                summary="도구 소독, 타월 분리, 알러지 케어 등 위생 포인트를 안내합니다. 피부가 민감한 아이도 편안하게."
-                imageSrc={stock.spaTowel}
-                imageAlt="편안한 케어"
-              />
-              <NaturalCard
-                href="/grooming/book"
-                title="예약 · 준비물"
-                summary="첫 방문 전 준비물과 예상 소요 시간을 정리했습니다. 챗봇으로도 빠르게 문의하세요."
-                imageSrc={stock.puppy}
-                imageAlt="강아지"
-              />
+            <p className="px-5 py-3 text-sm font-medium text-muted">Before — 털 엉킴·다듬기 전</p>
+          </PlateCard>
+          <PlateCard className="p-0 overflow-hidden">
+            <div className="relative aspect-[4/3] w-full">
+              <Image src={stock.dogGroom} alt="미용 후" fill className="object-cover" sizes="(max-width:768px) 100vw, 50vw" />
             </div>
-          </div>
-
-          <ProseBlock title="미용 전 체크 포인트" eyebrow="TIP">
-            <p>
-              미용 전날은 과도한 산책을 줄이고, 급식은 평소대로 유지해 주세요. 컨디션이 좋지 않거나 피부
-              트러블이 있으면 미리 알려주시면 케어 강도를 조절합니다.
-            </p>
-            <p>
-              <Link href="/grooming/safety" className="font-bold text-[var(--accent-dark)] underline-offset-4 hover:underline">
-                위생·안전 안내
-              </Link>
-              에서 소독 동선과 예약 변경 규정도 확인할 수 있어요.
-            </p>
-          </ProseBlock>
+            <p className="px-5 py-3 text-sm font-medium text-muted">After — 클리핑 후</p>
+          </PlateCard>
         </div>
+      </PlateSection>
 
-        <BookingTeaser
-          href="/grooming/book"
-          title="미용 예약"
-          body="날짜·아이 정보를 남겨주시면 확인 후 연락드립니다. 급하신 경우 전화 또는 카카오톡을 함께 이용해 주세요."
-        />
-      </div>
+      <PlateSection
+        id="price"
+        eyebrow="PRICE"
+        title="미용 코스 및 가격"
+        description="견종·체급·피모 상태에 따라 달라질 수 있어 방문 전 상담을 권장합니다."
+      >
+        <div className="grid gap-3 sm:grid-cols-3">
+          {courses.map((c) => (
+            <PlateCard key={c.name} className="!p-5">
+              <p className="text-xs font-semibold text-muted">{c.name}</p>
+              <p className="mt-2 text-lg font-bold text-[var(--text)]">{c.price}</p>
+              <p className="mt-2 text-sm text-muted">{c.note}</p>
+            </PlateCard>
+          ))}
+        </div>
+      </PlateSection>
 
-      <p className="mt-12 text-center text-sm text-muted">
-        <Link href="/" className="font-semibold text-[var(--accent-dark)] hover:underline">
-          ← 홈으로
-        </Link>
-      </p>
+      <PlateSection
+        id="breeds"
+        eyebrow="BREED"
+        title="견종별 추천"
+        description="대표적인 피모 타입별로 미용 시 포인트를 정리했습니다."
+      >
+        <div className="grid gap-4 md:grid-cols-3">
+          {breeds.map((b) => (
+            <PlateCard key={b.name} className="!p-0 overflow-hidden">
+              <div className="relative aspect-square w-full">
+                <Image src={b.src} alt="" fill className="object-cover" sizes="(max-width:768px) 100vw, 33vw" />
+              </div>
+              <div className="p-5">
+                <p className="font-bold text-[var(--text)]">{b.name}</p>
+                <p className="mt-2 text-sm text-muted">{b.tip}</p>
+              </div>
+            </PlateCard>
+          ))}
+        </div>
+      </PlateSection>
+
+      <PlateSection
+        id="staff"
+        eyebrow="STAFF"
+        title="미용사 소개"
+        description="애견 미용 자격과 매장 위생 교육을 이수한 스태프가 케어합니다."
+      >
+        <div className="grid items-center gap-8 md:grid-cols-[280px_1fr]">
+          <div className="relative aspect-square w-full max-w-xs overflow-hidden rounded-3xl border border-[var(--border)]">
+            <Image src={stock.groomStudio} alt="미용실" fill className="object-cover" sizes="280px" />
+          </div>
+          <PlateCard>
+            <p className="text-sm leading-relaxed text-muted">
+              스트레스를 줄이는 동선과 단계별 안내로 첫 방문 아이도 천천히 적응할 수 있게 돕습니다. 원하시는 스타일
+              레퍼런스 이미지를 지참해 주시면 길이·실루엣을 맞춰 상담합니다.
+            </p>
+          </PlateCard>
+        </div>
+      </PlateSection>
+
+      <PlateSection
+        id="notice"
+        eyebrow="NOTICE"
+        title="미용 전 주의사항"
+        description="안전한 케어를 위해 꼭 확인해 주세요."
+      >
+        <PlateCard>
+          <ul className="list-inside list-disc space-y-2 text-sm leading-relaxed text-muted">
+            <li>예방접종·건강 이상이 있으면 미리 알려 주세요.</li>
+            <li>식사는 미용 3시간 전 가볍게 조절해 주시면 좋아요.</li>
+            <li>피부 트러블·외상이 있으면 진료 후 방문을 권장합니다.</li>
+            <li>공격성이 강할 경우 마uzzle·단독 타임 등 별도 안내가 있을 수 있어요.</li>
+          </ul>
+        </PlateCard>
+        <p className="mt-10 text-center">
+          <Link
+            href="/grooming/book"
+            className="inline-flex rounded-2xl bg-[var(--text)] px-8 py-3.5 text-sm font-semibold text-white hover:opacity-90"
+          >
+            미용 예약하기
+          </Link>
+        </p>
+      </PlateSection>
     </div>
   );
 }

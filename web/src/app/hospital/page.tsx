@@ -1,93 +1,106 @@
 import Image from "next/image";
 import Link from "next/link";
-import { BookingTeaser } from "@/components/service/BookingTeaser";
-import { NaturalCard } from "@/components/service/NaturalCard";
-import { ProseBlock } from "@/components/service/ProseBlock";
-import { loadContentMap } from "@/lib/content-load";
-import { asText } from "@/lib/json-content";
-import { DEFAULT_PHONE, KAKAO_PLACEHOLDER_HREF, MOBILE_PHONE } from "@/lib/constants";
+import { PlateCard, PlateSection } from "@/components/ui/PlateSection";
+import { KAKAO_PLACEHOLDER_HREF, MOBILE_PHONE } from "@/lib/constants";
 import { stock } from "@/lib/stock-photos";
 
-export default async function HospitalOverviewPage() {
-  const map = await loadContentMap();
-  const intro = asText(
-    map["page_hospital_intro"],
-    "제휴 동물병원과 협력해 예방접종·건강검진 경로를 안내합니다."
-  );
-  const phone = asText(map["phone"], DEFAULT_PHONE);
-
+export default function HospitalPage() {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-10">
-      <div className="grid gap-10 lg:grid-cols-[1fr,300px] lg:items-start">
-        <div className="space-y-10">
-          <div className="overflow-hidden rounded-[2rem] border border-[var(--border)] bg-white shadow-sm">
-            <div className="grid gap-0 md:grid-cols-2">
-              <div className="relative min-h-[240px] w-full md:min-h-[300px]">
-                <Image src={stock.vet} alt="건강 상담" fill className="object-cover" priority />
-              </div>
-              <div className="flex flex-col justify-center p-6 sm:p-8">
-                <p className="text-xs font-bold uppercase tracking-wider text-[var(--accent-dark)]">제휴 안내</p>
-                <h2 className="mt-2 text-2xl font-extrabold text-[var(--text)]">건강은 예방이 먼저예요</h2>
-                <p className="mt-4 text-sm leading-relaxed text-muted sm:text-base">{intro}</p>
-                <p className="mt-4 rounded-2xl bg-[color-mix(in_srgb,var(--accent-2)_40%,white)] p-4 text-sm ring-1 ring-[var(--border)]">
-                  긴급 연락: <span className="font-bold">{phone}</span> ·{" "}
-                  <span className="font-bold">{MOBILE_PHONE}</span>
-                  <br />
-                  <a href={KAKAO_PLACEHOLDER_HREF} className="font-bold text-[var(--accent-dark)] underline">
-                    카카오톡
-                  </a>
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="wave-divider" aria-hidden />
-
-          <div>
-            <h2 className="text-xl font-extrabold text-[var(--text)]">안내 더보기</h2>
-            <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              <NaturalCard
-                href="/hospital/visit"
-                title="방문 · 예방"
-                summary="접종 스케줄·심장사상충 예방·구충 주기를 정리했습니다."
-                imageSrc={stock.dogHappy}
-                imageAlt="건강한 강아지"
-              />
-              <NaturalCard
-                href="/hospital/emergency"
-                title="응급 안내"
-                summary="응급 신호와 이동 전 준비물을 안내드립니다."
-                imageSrc={stock.puppy}
-                imageAlt="강아지"
-              />
-              <NaturalCard
-                href="/hospital/contact"
-                title="문의"
-                summary="제휴·진료 경로 관련 질문을 남겨주세요."
-                imageSrc={stock.vet}
-                imageAlt="상담"
-              />
-            </div>
-          </div>
-
-          <ProseBlock title="진료 연계 안내" eyebrow="NOTE">
-            <p>
-              본 페이지의 이미지는 이해를 돕기 위한 스톡 사진입니다. 실제 제휴 병원 정보는 전화·방문 상담 시
-              안내드립니다.
-            </p>
-          </ProseBlock>
+    <div className="mx-auto max-w-5xl space-y-20 px-4 py-14">
+      <PlateSection
+        id="services"
+        eyebrow="CLINIC"
+        title="진료 가능 항목"
+        description="제휴 병원 기준 예시이며, 실제는 병원 일정에 따라 달라질 수 있습니다."
+      >
+        <div className="grid gap-3 sm:grid-cols-2">
+          {["건강검진", "예방접종", "피부·외이", "소화기", "정형 외상", "치과 상담"].map((t) => (
+            <PlateCard key={t} className="!py-4 text-center text-sm font-semibold text-[var(--text)]">
+              {t}
+            </PlateCard>
+          ))}
         </div>
-        <BookingTeaser
-          href="/hospital/contact"
-          title="병원 문의"
-          body="연락 가능한 시간대를 함께 적어주시면 빠르게 회신드립니다."
-        />
-      </div>
-      <p className="mt-12 text-center text-sm text-muted">
-        <Link href="/" className="font-semibold text-[var(--accent-dark)] hover:underline">
-          ← 홈으로
-        </Link>
-      </p>
+      </PlateSection>
+
+      <PlateSection
+        id="flow"
+        eyebrow="FLOW"
+        title="진료 절차"
+        description="방문 전 예약을 권장합니다."
+      >
+        <PlateCard>
+          <ol className="list-decimal space-y-3 pl-4 text-sm text-muted">
+            <li>전화 또는 카카오로 증상·희망 시간 전달</li>
+            <li>접수 후 대기 — 긴급도에 따라 순서 조정</li>
+            <li>진료·처방·다음 방문 안내</li>
+            <li>수납 및 예약(필요 시)</li>
+          </ol>
+        </PlateCard>
+      </PlateSection>
+
+      <PlateSection id="vet" eyebrow="VET" title="수의사 소개" description="제휴 병원 담당 선생님 프로필 예시입니다.">
+        <div className="grid items-center gap-8 md:grid-cols-[240px_1fr]">
+          <div className="relative aspect-[3/4] w-full max-w-[240px] overflow-hidden rounded-3xl border border-[var(--border)]">
+            <Image src={stock.vetSmile} alt="" fill className="object-cover" sizes="240px" />
+          </div>
+          <PlateCard>
+            <p className="text-sm font-bold text-[var(--text)]">김OO 수의사</p>
+            <p className="mt-3 text-sm leading-relaxed text-muted">
+              소동물 임상 경력 기반으로 예방의학·노령견 만성 질환 관리를 담당합니다. (실제 프로필은 제휴 병원 안내에
+              따릅니다.)
+            </p>
+          </PlateCard>
+        </div>
+      </PlateSection>
+
+      <PlateSection
+        id="emergency"
+        eyebrow="ER"
+        title="응급 안내"
+        description="위급 시 먼저 전화해 주세요."
+      >
+        <PlateCard className="border-rose-100 bg-[color-mix(in_srgb,white_92%,#ffe4e6)]">
+          <p className="text-sm font-bold text-rose-900">응급 징후 예시</p>
+          <ul className="mt-3 list-disc space-y-2 pl-4 text-sm text-rose-900/90">
+            <li>호흡 곤란, 의식 저하</li>
+            <li>지속 구토·혈변</li>
+            <li>외상·낙상 후 보행 이상</li>
+          </ul>
+          <a
+            href={`tel:${MOBILE_PHONE.replace(/-/g, "")}`}
+            className="mt-6 inline-flex rounded-2xl bg-rose-700 px-5 py-3 text-sm font-semibold text-white hover:bg-rose-800"
+          >
+            긴급 연락 {MOBILE_PHONE}
+          </a>
+        </PlateCard>
+      </PlateSection>
+
+      <PlateSection
+        id="vaccine"
+        eyebrow="VACCINE"
+        title="예방접종 안내"
+        description="생후 주차·체중에 맞춰 스케줄을 조정합니다."
+      >
+        <div className="relative aspect-[21/9] w-full overflow-hidden rounded-3xl border border-[var(--border)]">
+          <Image src={stock.vetExam} alt="" fill className="object-cover" sizes="100vw" />
+        </div>
+        <PlateCard className="mt-4">
+          <ul className="space-y-2 text-sm text-muted">
+            <li>종합백신(DHPPL) — 기본 스케줄 병원 안내</li>
+            <li>코로나·켄넬코프 등 선택 접종 상담</li>
+            <li>접종 후 24시간은 격한 운동 자제</li>
+          </ul>
+        </PlateCard>
+        <p className="mt-10 text-center">
+          <Link href="/hospital/contact" className="text-sm font-semibold text-[var(--accent-dark)] hover:underline">
+            병원 관련 문의 →
+          </Link>
+          {" · "}
+          <a href={KAKAO_PLACEHOLDER_HREF} className="text-sm font-semibold text-[var(--accent-dark)] hover:underline">
+            카카오톡
+          </a>
+        </p>
+      </PlateSection>
     </div>
   );
 }

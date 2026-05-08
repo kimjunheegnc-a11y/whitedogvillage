@@ -14,4 +14,15 @@ export const stock = {
   kibble: "https://images.unsplash.com/photo-1568640347024-a616a30bc3bd?auto=format&fit=crop&w=1200&q=80",
   bowls: "https://images.unsplash.com/photo-1545247181-016843aca13e?auto=format&fit=crop&w=1200&q=80",
   spaTowel: "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=1200&q=80",
+  /** 미용 비포 느낌 — 털 정리 전 */
+  groomBefore: "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=1200&q=80",
+  groomStudio: "https://images.unsplash.com/photo-1516734212186-a967f63f3f60?auto=format&fit=crop&w=1200&q=80",
+  poodle: "https://images.unsplash.com/photo-1598133894008-61f0fdb01888?auto=format&fit=crop&w=1200&q=80",
+  shiba: "https://images.unsplash.com/photo-1588943211346-0908a1fb0b01?auto=format&fit=crop&w=1200&q=80",
+  hotelRoom: "https://images.unsplash.com/photo-1530281700549-e82e7bf110d6?auto=format&fit=crop&w=1200&q=80",
+  hotelPlay: "https://images.unsplash.com/photo-1601758228041-f3b2795255f1?auto=format&fit=crop&w=1200&q=80",
+  snackShelf: "https://images.unsplash.com/photo-1589924691995-400dc9ecc119?auto=format&fit=crop&w=1200&q=80",
+  snackBowl: "https://images.unsplash.com/photo-1568640347024-a616a30bc3bd?auto=format&fit=crop&w=1200&q=80",
+  vetExam: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&w=1200&q=80",
+  vetSmile: "https://images.unsplash.com/photo-1628009368239-7bb7cfcb0def?auto=format&fit=crop&w=1200&q=80",
 } as const;

@@ -1,108 +1,70 @@
-import Image from "next/image";
 import Link from "next/link";
-import { BookingTeaser } from "@/components/service/BookingTeaser";
-import { NaturalCard } from "@/components/service/NaturalCard";
-import { ProseBlock } from "@/components/service/ProseBlock";
-import { loadContentMap } from "@/lib/content-load";
-import { asText } from "@/lib/json-content";
+import { AdoptionPuppyCards } from "@/components/bunyang/AdoptionPuppyCards";
+import { PlateCard, PlateSection } from "@/components/ui/PlateSection";
+import { ADOPTION_PUPPIES } from "@/lib/adoption-puppies";
 import { KAKAO_PLACEHOLDER_HREF } from "@/lib/constants";
-import { stock } from "@/lib/stock-photos";
 
-export default async function BunyangOverviewPage() {
-  const map = await loadContentMap();
-  const intro = asText(
-    map["page_bunyang_intro"],
-    "책임 있는 분양을 위해 상담·관리 기록을 투명하게 안내드립니다."
-  );
-
+export default function BunyangPage() {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-10">
-      <div className="grid gap-10 lg:grid-cols-[1fr,300px] lg:items-start">
-        <div className="space-y-10">
-          <div className="overflow-hidden rounded-[2rem] border border-[var(--border)] bg-white shadow-sm">
-            <div className="grid gap-0 md:grid-cols-2">
-              <div className="relative min-h-[260px] w-full md:min-h-[320px]">
-                <Image src={stock.puppy} alt="강아지" fill className="object-cover" priority />
-              </div>
-              <div className="flex flex-col justify-center p-6 sm:p-8">
-                <p className="text-xs font-bold uppercase tracking-wider text-[var(--accent-dark)]">분양 소개</p>
-                <h2 className="mt-2 text-2xl font-extrabold text-[var(--text)]">사랑으로 연결하는 분양</h2>
-                <p className="mt-4 text-sm leading-relaxed text-muted sm:text-base">{intro}</p>
-                <div className="mt-6 flex flex-wrap gap-2">
-                  {["#365일", "#전문분양", "#건강검진", "#책임분양"].map((t) => (
-                    <span
-                      key={t}
-                      className="rounded-full bg-[color-mix(in_srgb,var(--accent-2)_55%,white)] px-3 py-1 text-xs font-semibold text-[var(--text)] ring-1 ring-[var(--border)]"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-                <div className="mt-6 flex flex-wrap gap-3">
-                  <Link
-                    href="/bunyang/book"
-                    className="inline-flex items-center justify-center rounded-full bg-accent px-5 py-3 text-sm font-bold text-white shadow hover:bg-accent-dark"
-                  >
-                    상담·예약
-                  </Link>
-                  <a
-                    href={KAKAO_PLACEHOLDER_HREF}
-                    className="inline-flex items-center justify-center rounded-full border border-[var(--border)] bg-white px-5 py-3 text-sm font-bold text-[var(--text)] hover:bg-[color-mix(in_srgb,white_70%,var(--accent-2))]"
-                  >
-                    카카오 상담
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
+    <div className="mx-auto max-w-5xl space-y-20 px-4 py-14">
+      <PlateSection
+        eyebrow="LISTING"
+        title="분양 아이들"
+        description="데모용 예시 카드 4건입니다. 실제 분양 시에는 사진·검진 기록이 업데이트됩니다."
+      >
+        <AdoptionPuppyCards puppies={ADOPTION_PUPPIES} />
+      </PlateSection>
 
-          <div className="wave-divider" aria-hidden />
-
-          <div>
-            <h2 className="text-xl font-extrabold text-[var(--text)]">더 알아보기</h2>
-            <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              <NaturalCard
-                href="/bunyang/health"
-                title="건강 · 검진"
-                summary="기본 검진·접종 기록 확인과 분양 후 케어 팁을 정리했습니다."
-                imageSrc={stock.vet}
-                imageAlt="건강 상담"
-              />
-              <NaturalCard
-                href="/bunyang/responsible"
-                title="책임 분양"
-                summary="상담·계약·사후 관리까지 단계별로 안내드립니다."
-                imageSrc={stock.dogCat}
-                imageAlt="반려동물"
-              />
-              <NaturalCard
-                href="/bunyang/book"
-                title="상담 예약"
-                summary="가정 환경·케어 경험을 남겨주시면 맞춤 상담이 가능합니다."
-                imageSrc={stock.kitten}
-                imageAlt="고양이"
-              />
-            </div>
-          </div>
-
-          <ProseBlock title="상담이 중요한 이유" eyebrow="NOTE">
-            <p>
-              분양은 한 번의 선택이 아니라 오랜 동행의 시작입니다. 생활 패턴·알러지·거주 환경을 함께
-              점검해 아이와 가족 모두가 편안한 결정을 돕습니다.
-            </p>
-          </ProseBlock>
+      <PlateSection
+        id="process"
+        eyebrow="PROCESS"
+        title="분양 프로세스"
+        description="상담부터 입가까지 단계를 투명하게 안내합니다."
+      >
+        <div className="grid gap-4 md:grid-cols-2">
+          {[
+            ["1", "사전 상담", "가정 환경·알러지·케어 경험 확인"],
+            ["2", "만남", "아이 성향·건강 기록 확인"],
+            ["3", "계약", "책임 분양 조건·사후 케어 안내"],
+            ["4", "입가 후", "적응 기간 체크리스트 제공"],
+          ].map(([n, t, d]) => (
+            <PlateCard key={n} className="!p-5">
+              <span className="text-xs font-bold text-[var(--accent-dark)]">STEP {n}</span>
+              <p className="mt-2 text-base font-bold text-[var(--text)]">{t}</p>
+              <p className="mt-2 text-sm text-muted">{d}</p>
+            </PlateCard>
+          ))}
         </div>
-        <BookingTeaser
-          href="/bunyang/book"
-          title="분양 상담 예약"
-          body="관심 있는 아이의 정보와 방문 가능 일정을 남겨주세요."
-        />
-      </div>
-      <p className="mt-12 text-center text-sm text-muted">
-        <Link href="/" className="font-semibold text-[var(--accent-dark)] hover:underline">
-          ← 홈으로
-        </Link>
-      </p>
+      </PlateSection>
+
+      <PlateSection
+        id="health"
+        eyebrow="HEALTH"
+        title="건강 관리"
+        description="분양 전·후 건강 관리 포인트입니다."
+      >
+        <PlateCard>
+          <ul className="list-disc space-y-2 pl-4 text-sm text-muted">
+            <li>기본 접종·기생충 예방 기록 제공</li>
+            <li>분양 직후 2주는 급격한 사료 변경 자제</li>
+            <li>이상 징후 시 제휴 병원 동선 안내</li>
+          </ul>
+        </PlateCard>
+        <div className="mt-10 flex flex-wrap justify-center gap-3">
+          <Link
+            href="/bunyang/book"
+            className="inline-flex rounded-2xl bg-[var(--text)] px-8 py-3.5 text-sm font-semibold text-white hover:opacity-90"
+          >
+            상담·예약
+          </Link>
+          <a
+            href={KAKAO_PLACEHOLDER_HREF}
+            className="inline-flex rounded-2xl border border-[var(--border)] bg-white px-8 py-3.5 text-sm font-semibold hover:bg-[color-mix(in_srgb,white_92%,var(--accent-2))]"
+          >
+            카카오톡
+          </a>
+        </div>
+      </PlateSection>
     </div>
   );
 }

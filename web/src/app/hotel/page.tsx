@@ -1,98 +1,135 @@
 import Image from "next/image";
 import Link from "next/link";
-import { BookingTeaser } from "@/components/service/BookingTeaser";
-import { NaturalCard } from "@/components/service/NaturalCard";
-import { ProseBlock } from "@/components/service/ProseBlock";
-import { loadContentMap } from "@/lib/content-load";
-import { asText } from "@/lib/json-content";
-import { KAKAO_PLACEHOLDER_HREF } from "@/lib/constants";
+import { MiniCalendar } from "@/components/hotel/MiniCalendar";
+import { PlateCard, PlateSection } from "@/components/ui/PlateSection";
 import { stock } from "@/lib/stock-photos";
 
-export default async function HotelOverviewPage() {
-  const map = await loadContentMap();
-  const intro = asText(
-    map["page_hotel_intro"],
-    "안전한 케이지·넓은 놀이 공간에서 하루 리듬에 맞춰 돌봄을 제공합니다."
-  );
+function demoAvailableDays() {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = now.getMonth();
+  const last = new Date(y, m + 1, 0).getDate();
+  const out = [];
+  for (let d = 2; d <= last; d += 1) {
+    if (d % 7 === 2 || d % 7 === 3 || d % 7 === 4) out.push(d);
+  }
+  return out;
+}
+
+export default function HotelPage() {
+  const avail = demoAvailableDays();
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-10">
-      <div className="grid gap-10 lg:grid-cols-[1fr,300px] lg:items-start">
-        <div className="space-y-10">
-          <div className="overflow-hidden rounded-[2rem] border border-[var(--border)] bg-white shadow-sm">
-            <div className="grid gap-0 md:grid-cols-2">
-              <div className="relative min-h-[260px] w-full md:min-h-[320px]">
-                <Image src={stock.hotelDog} alt="호텔링 돌봄" fill className="object-cover" priority />
-              </div>
-              <div className="flex flex-col justify-center p-6 sm:p-8">
-                <p className="text-xs font-bold uppercase tracking-wider text-[var(--accent-dark)]">호텔 안내</p>
-                <h2 className="mt-2 text-2xl font-extrabold text-[var(--text)]">편안한 하루 루틴</h2>
-                <p className="mt-4 text-sm leading-relaxed text-muted sm:text-base">{intro}</p>
-                <div className="mt-6 flex flex-wrap gap-3">
-                  <Link
-                    href="/hotel/book"
-                    className="inline-flex items-center justify-center rounded-full bg-accent px-5 py-3 text-sm font-bold text-white shadow hover:bg-accent-dark"
-                  >
-                    숙박 예약
-                  </Link>
-                  <a
-                    href={KAKAO_PLACEHOLDER_HREF}
-                    className="inline-flex items-center justify-center rounded-full border border-[var(--border)] bg-white px-5 py-3 text-sm font-bold text-[var(--text)] hover:bg-[color-mix(in_srgb,white_70%,var(--accent-2))]"
-                  >
-                    카카오 상담
-                  </a>
-                </div>
-              </div>
-            </div>
+    <div className="mx-auto max-w-5xl space-y-20 px-4 py-14">
+      <PlateSection
+        id="space"
+        eyebrow="SPACE"
+        title="호텔 공간 소개"
+        description="쾌적한 바닥재·환기·카메라 안내 구역으로 구성했습니다."
+      >
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-[var(--border)]">
+            <Image src={stock.hotelRoom} alt="호텔 런" fill className="object-cover" sizes="(max-width:768px) 100vw, 50vw" />
           </div>
-
-          <div className="wave-divider" aria-hidden />
-
-          <div>
-            <h2 className="text-xl font-extrabold text-[var(--text)]">호텔링 가이드</h2>
-            <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              <NaturalCard
-                href="/hotel/day"
-                title="하루 돌봄 타임라인"
-                summary="산책·급식·휴식·플레이 타임을 어떻게 배치하는지 안내드려요."
-                imageSrc={stock.dogCat}
-                imageAlt="강아지와 고양이"
-              />
-              <NaturalCard
-                href="/hotel/checklist"
-                title="입실 체크리스트"
-                summary="사료·약·인식표·케이지 익숙도 등 미리 준비하면 체크인이 빨라져요."
-                imageSrc={stock.dogHappy}
-                imageAlt="산책하는 강아지"
-              />
-              <NaturalCard
-                href="/hotel/book"
-                title="예약 안내"
-                summary="기간·픽업 시간·특이사항을 남겨주세요. 챗봇으로도 접수됩니다."
-                imageSrc={stock.puppy}
-                imageAlt="강아지"
-              />
-            </div>
+          <div className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-[var(--border)]">
+            <Image src={stock.hotelPlay} alt="놀이 공간" fill className="object-cover" sizes="(max-width:768px) 100vw, 50vw" />
           </div>
-
-          <ProseBlock title="케어 철학" eyebrow="HOTEL">
-            <p>
-              호텔은 &apos;맡기는 곳&apos;이 아니라 아이가 익숙한 리듬을 최대한 유지하는 공간이라고 생각합니다.
-              첫날은 적응 시간을 충분히 가지며, 식사·배변 패턴을 기록해 드립니다.
-            </p>
-          </ProseBlock>
         </div>
-        <BookingTeaser
-          href="/hotel/book"
-          title="호텔 예약"
-          body="입실·퇴실 시간과 급여 지침을 적어주시면 맞춤 돌봄에 반영됩니다."
-        />
-      </div>
-      <p className="mt-12 text-center text-sm text-muted">
-        <Link href="/" className="font-semibold text-[var(--accent-dark)] hover:underline">
-          ← 홈으로
-        </Link>
-      </p>
+      </PlateSection>
+
+      <PlateSection
+        id="routine"
+        eyebrow="DAY"
+        title="하루 루틴"
+        description="체크인 후 급식·산책·휴식 리듬을 맞춥니다."
+      >
+        <PlateCard>
+          <ol className="space-y-4 text-sm text-muted">
+            {[
+              ["09:00", "체크인 · 건강 상태 확인"],
+              ["10:30", "산책 · 배변"],
+              ["12:30", "급식(사료 지참 시)"],
+              ["15:00", "실내놀이 · 휴식"],
+              ["18:00", "저녁 산책"],
+              ["21:00", "취침 전 물·배변"],
+            ].map(([t, s]) => (
+              <li key={t} className="flex gap-4 border-b border-[var(--border)] border-opacity-60 pb-3 last:border-0">
+                <span className="w-14 shrink-0 font-bold text-[var(--text)]">{t}</span>
+                <span>{s}</span>
+              </li>
+            ))}
+          </ol>
+        </PlateCard>
+      </PlateSection>
+
+      <PlateSection
+        id="care"
+        eyebrow="CARE"
+        title="실시간 케어"
+        description="투숙 중 사진·영상을 짧게 공유해 드립니다. (서비스 범위는 상담 시 안내)"
+      >
+        <PlateCard>
+          <p className="text-sm leading-relaxed text-muted">
+            급식·배변·활동량을 기록해 퇴실 시 한눈에 전달드립니다. 이상 징후가 보이면 바로 연락드리는 것을 원칙으로
+            합니다.
+          </p>
+        </PlateCard>
+      </PlateSection>
+
+      <PlateSection id="price" eyebrow="PRICE" title="가격" description="체급·일수에 따라 달라지며 상담 후 확정됩니다.">
+        <div className="grid gap-3 sm:grid-cols-3">
+          {[
+            { n: "소형", p: "4만 원대~/박", d: "7kg 미만 기준" },
+            { n: "중형", p: "5만 원대~/박", d: "7–15kg" },
+            { n: "대형", p: "별도 문의", d: "15kg 초과" },
+          ].map((x) => (
+            <PlateCard key={x.n} className="!p-5">
+              <p className="text-xs font-semibold text-muted">{x.n}</p>
+              <p className="mt-2 text-lg font-bold">{x.p}</p>
+              <p className="mt-2 text-xs text-muted">{x.d}</p>
+            </PlateCard>
+          ))}
+        </div>
+      </PlateSection>
+
+      <PlateSection
+        id="checklist"
+        eyebrow="CHECKLIST"
+        title="준비물 · 안내"
+        description="입실 전 체크리스트입니다."
+      >
+        <PlateCard>
+          <ul className="list-disc space-y-2 pl-4 text-sm text-muted">
+            <li>평소 먹는 사료·간식 (급성 위장 이슈 방지)</li>
+            <li>이름표·목줄·입마개(필요 시)</li>
+            <li>예방접종 증명서 사본</li>
+            <li>복용 중인 약과 용법 메모</li>
+          </ul>
+        </PlateCard>
+      </PlateSection>
+
+      <PlateSection
+        id="calendar"
+        eyebrow="BOOK"
+        title="예약 가능 날짜"
+        description="아래는 UI 예시입니다. 실제 예약은 전화·카카오·예약 폼으로 확정합니다."
+      >
+        <div className="grid gap-8 lg:grid-cols-[1fr_320px] lg:items-start">
+          <MiniCalendar availableDays={avail} />
+          <PlateCard className="!p-5">
+            <p className="text-sm text-muted">
+              원하시는 입실·퇴실 일정을 예약 폼에 적어 주세요. 달력에 표시된 날짜는 &ldquo;상담 가능한
+              슬롯&rdquo; 예시입니다.
+            </p>
+            <Link
+              href="/hotel/book"
+              className="mt-6 inline-flex w-full justify-center rounded-2xl bg-[var(--text)] py-3 text-sm font-semibold text-white hover:opacity-90"
+            >
+              호텔 예약하기
+            </Link>
+          </PlateCard>
+        </div>
+      </PlateSection>
     </div>
   );
 }

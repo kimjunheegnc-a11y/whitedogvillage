@@ -1,90 +1,137 @@
 import Image from "next/image";
 import Link from "next/link";
-import { BookingTeaser } from "@/components/service/BookingTeaser";
-import { NaturalCard } from "@/components/service/NaturalCard";
-import { ProseBlock } from "@/components/service/ProseBlock";
-import { loadContentMap } from "@/lib/content-load";
-import { asText } from "@/lib/json-content";
+import { PlateCard, PlateSection } from "@/components/ui/PlateSection";
 import { stock } from "@/lib/stock-photos";
 
-export default async function SnacksOverviewPage() {
-  const map = await loadContentMap();
-  const intro = asText(
-    map["page_snacks_intro"],
-    "대용량 간식·사료부터 덴탈껌까지 매장에서 골라보실 수 있습니다."
-  );
-
+export default function SnacksPage() {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-10">
-      <div className="grid gap-10 lg:grid-cols-[1fr,300px] lg:items-start">
-        <div className="space-y-10">
-          <div className="overflow-hidden rounded-[2rem] border border-[var(--border)] bg-white shadow-sm">
-            <div className="grid gap-0 md:grid-cols-2">
-              <div className="relative min-h-[240px] w-full md:min-h-[300px]">
-                <Image src={stock.treats} alt="간식" fill className="object-cover" priority />
-              </div>
-              <div className="flex flex-col justify-center p-6 sm:p-8">
-                <p className="text-xs font-bold uppercase tracking-wider text-[var(--accent-dark)]">매장 안내</p>
-                <h2 className="mt-2 text-2xl font-extrabold text-[var(--text)]">매장에서 천천히 고르기</h2>
-                <p className="mt-4 text-sm leading-relaxed text-muted sm:text-base">{intro}</p>
-                <div className="mt-6 flex flex-wrap gap-2">
-                  {["#대용량간식", "#사료", "#애견용품"].map((t) => (
-                    <span
-                      key={t}
-                      className="rounded-full bg-[color-mix(in_srgb,var(--accent-2)_55%,white)] px-3 py-1 text-xs font-semibold text-[var(--text)] ring-1 ring-[var(--border)]"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </div>
+    <div className="mx-auto max-w-5xl space-y-20 px-4 py-14">
+      <PlateSection
+        id="popular"
+        eyebrow="BEST"
+        title="인기 간식"
+        description="매장에서 회전이 빠른 라인업입니다. (이미지는 예시 스톡입니다.)"
+      >
+        <div className="grid gap-4 md:grid-cols-2">
+          <PlateCard className="!p-0 overflow-hidden">
+            <div className="relative aspect-[16/10] w-full">
+              <Image src={stock.snackShelf} alt="" fill className="object-cover" sizes="(max-width:768px) 100vw, 50vw" />
             </div>
-          </div>
-
-          <div className="wave-divider" aria-hidden />
-
-          <div>
-            <h2 className="text-xl font-extrabold text-[var(--text)]">추천 코너</h2>
-            <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              <NaturalCard
-                href="/snacks/picks"
-                title="추천 간식 · 사료"
-                summary="저알러지·노령·소형견까지 상황별로 고를 수 있는 라인업을 소개합니다."
-                imageSrc={stock.kibble}
-                imageAlt="사료"
-              />
-              <NaturalCard
-                href="/snacks/tips"
-                title="급여 · 보관 팁"
-                summary="칼로리 조절·습기 관리·간식 급여 타이밍을 정리했습니다."
-                imageSrc={stock.bowls}
-                imageAlt="밥그릇"
-              />
-              <NaturalCard
-                href="/snacks/contact"
-                title="입고 문의"
-                summary="찾으시는 제품이 있다면 남겨주세요. 챗봇으로도 접수됩니다."
-                imageSrc={stock.treats}
-                imageAlt="간식"
-              />
+            <div className="p-5">
+              <p className="font-bold text-[var(--text)]">저알러지 져키</p>
+              <p className="mt-2 text-sm text-muted">소프트 타입 · 노령견 문의 많음</p>
             </div>
-          </div>
-
-          <ProseBlock title="매장 이용 팁" eyebrow="STORE">
-            <p>대용량 제품은 개봉 전 상태를 확인해 드리니, 필요하면 직원에게 말씀해 주세요.</p>
-          </ProseBlock>
+          </PlateCard>
+          <PlateCard className="!p-0 overflow-hidden">
+            <div className="relative aspect-[16/10] w-full">
+              <Image src={stock.treats} alt="" fill className="object-cover" sizes="(max-width:768px) 100vw, 50vw" />
+            </div>
+            <div className="p-5">
+              <p className="font-bold text-[var(--text)]">동결건조 트릿</p>
+              <p className="mt-2 text-sm text-muted">훈련 보상용으로 인기</p>
+            </div>
+          </PlateCard>
         </div>
-        <BookingTeaser
-          href="/snacks/contact"
-          title="문의 · 입고"
-          body="제품명·브랜드·수량을 남겨주시면 확인 후 연락드립니다."
-        />
-      </div>
-      <p className="mt-12 text-center text-sm text-muted">
-        <Link href="/" className="font-semibold text-[var(--accent-dark)] hover:underline">
-          ← 홈으로
-        </Link>
-      </p>
+      </PlateSection>
+
+      <PlateSection
+        id="recommend"
+        eyebrow="PICK"
+        title="추천 간식 — 연령 · 종별"
+        description="생애 주기와 체형에 맞춰 매장에서 안내드립니다."
+      >
+        <div className="grid gap-3 sm:grid-cols-2">
+          <PlateCard>
+            <p className="text-xs font-semibold text-[var(--accent-dark)]">퍼피</p>
+            <p className="mt-2 text-sm text-muted">작은 입 크기, 연한 질감의 트릿·소프트 타입.</p>
+          </PlateCard>
+          <PlateCard>
+            <p className="text-xs font-semibold text-[var(--accent-dark)]">시니어</p>
+            <p className="mt-2 text-sm text-muted">저염·관절 케어 성분이 들어간 라인.</p>
+          </PlateCard>
+          <PlateCard>
+            <p className="text-xs font-semibold text-[var(--accent-dark)]">소형견</p>
+            <p className="mt-2 text-sm text-muted">한 입 크기와 칼로리 밸런스를 맞춘 제품.</p>
+          </PlateCard>
+          <PlateCard>
+            <p className="text-xs font-semibold text-[var(--accent-dark)]">중대형</p>
+            <p className="mt-2 text-sm text-muted">씹는 만족감이 있는 덴탈·건조껌류.</p>
+          </PlateCard>
+        </div>
+      </PlateSection>
+
+      <PlateSection
+        id="health"
+        eyebrow="HEALTH"
+        title="건강 목적 간식"
+        description="피모·관절·소화 등 목적에 맞는 제품을 골라 담아 드립니다."
+      >
+        <PlateCard>
+          <ul className="space-y-3 text-sm text-muted">
+            <li className="flex gap-2">
+              <span className="font-bold text-[var(--text)]">피모</span>
+              <span>오메가가 보강된 사료·트릿 병행 안내</span>
+            </li>
+            <li className="flex gap-2">
+              <span className="font-bold text-[var(--text)]">관절</span>
+              <span>글루코사민·MSM 함유 제품 라인</span>
+            </li>
+            <li className="flex gap-2">
+              <span className="font-bold text-[var(--text)]">소화</span>
+              <span>단일 단백·저지방 스낵 추천</span>
+            </li>
+          </ul>
+        </PlateCard>
+      </PlateSection>
+
+      <PlateSection
+        id="staff"
+        eyebrow="DEAL"
+        title="직원 추천 · 할인"
+        description="월별 프로모션은 매장 포스터와 챗봇 안내를 확인해 주세요."
+      >
+        <div className="grid gap-4 md:grid-cols-[1fr_200px] md:items-center">
+          <PlateCard>
+            <p className="text-sm leading-relaxed text-muted">
+              &ldquo;입맛 까다로운 아이에게 부드러운 동결건조를 먼저 드려 보세요.&rdquo; — 매장 추천 픽 예시입니다. 실제 할인
+              품목은 방문 시 확인 가능합니다.
+            </p>
+          </PlateCard>
+          <div className="relative aspect-square w-full max-w-[200px] overflow-hidden rounded-3xl border border-[var(--border)]">
+            <Image src={stock.kibble} alt="" fill className="object-cover" sizes="200px" />
+          </div>
+        </div>
+      </PlateSection>
+
+      <PlateSection
+        id="guide"
+        eyebrow="GUIDE"
+        title="급여 가이드"
+        description="하루 간식 칼로리는 본식의 10% 이내를 권장합니다."
+      >
+        <PlateCard>
+          <ol className="list-decimal space-y-2 pl-4 text-sm text-muted">
+            <li>본식 사료량과 겹치지 않게 간식 시간을 정합니다.</li>
+            <li>새 제품은 소량으로 시작해 설사·가스 여부를 봅니다.</li>
+            <li>덴탈껌은 감시 하에 급여하고 잔여는 치웁니다.</li>
+            <li>포장·유통기한은 매장에서 함께 확인해 드립니다.</li>
+          </ol>
+        </PlateCard>
+        <p className="mt-10 flex flex-wrap justify-center gap-3">
+          <Link
+            href="/snacks/reserve"
+            className="inline-flex rounded-2xl bg-[var(--text)] px-8 py-3.5 text-sm font-semibold text-white hover:opacity-90"
+          >
+            간식 담아두기
+          </Link>
+          <Link
+            href="/snacks/contact"
+            className="inline-flex rounded-2xl border border-[var(--border)] bg-white px-8 py-3.5 text-sm font-semibold hover:bg-[color-mix(in_srgb,white_92%,var(--accent-2))]"
+          >
+            문의하기
+          </Link>
+        </p>
+      </PlateSection>
     </div>
   );
 }

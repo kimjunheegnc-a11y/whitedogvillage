@@ -1,5 +1,5 @@
 export const SITE_NAME = "하얀 개 마을";
-export const SITE_TAGLINE = "연중무휴 · 반려동물 전문 (애견용품·미용·호텔·분양)";
+export const SITE_TAGLINE = "분양 · 호텔 · 미용 · 간식 — 가족처럼 돌보는 애견 센터";
 export const DEFAULT_PHONE = "031-334-3336";
 export const MOBILE_PHONE = "010-2926-5400";
 export const DEFAULT_ADDRESS = "경기 용인시 처인구 금령로 1 (김량장동)";
