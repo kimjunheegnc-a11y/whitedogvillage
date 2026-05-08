@@ -25,4 +25,18 @@ export const stock = {
   snackBowl: "https://images.unsplash.com/photo-1568640347024-a616a30bc3bd?auto=format&fit=crop&w=1200&q=80",
   vetExam: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&w=1200&q=80",
   vetSmile: "https://images.unsplash.com/photo-1628009368239-7bb7cfcb0def?auto=format&fit=crop&w=1200&q=80",
+  /** 진료 중 수의사·환자 (병원 히어로용) */
+  vetWithDog: "https://images.unsplash.com/photo-1551601651-2a8555f1a136?auto=format&fit=crop&w=1200&q=80",
+  /** 미용 직후 뽀송한 모습 */
+  groomAfterShine: "https://images.unsplash.com/photo-1568572933382-74d440642887?auto=format&fit=crop&w=1200&q=80",
+  /** 소형견 추천 카드용 */
+  breedChihuahua: "https://images.unsplash.com/photo-1546527868-ccb7ee7dfa6a?auto=format&fit=crop&w=900&q=80",
+  breedMaltese: "https://images.unsplash.com/photo-1455103498023-437943def005?auto=format&fit=crop&w=900&q=80",
+  breedYorkie: "https://images.unsplash.com/photo-1594149927158-91abc773247e?auto=format&fit=crop&w=900&q=80",
+  /** 미용사·케어 스태프 느낌 */
+  groomerStaff: "https://images.unsplash.com/photo-1559592413-7cec6dccdace?auto=format&fit=crop&w=1200&q=80",
+  /** 직원 추천 간식 — 매장 픽 */
+  staffPickSnacks: "https://images.unsplash.com/photo-1609840114035-3d98177d1078?auto=format&fit=crop&w=1200&q=80",
+  /** 분양·브러싱(솔) 안내 — 용품과 아이 */
+  bunyangBrushCare: "https://images.unsplash.com/photo-1514996937319-344454492b37?auto=format&fit=crop&w=1200&q=80",
 } as const;

@@ -18,8 +18,8 @@ export const NAV = [
   { href: "/", label: "홈" },
   { href: "/hospital", label: "병원" },
   { href: "/grooming", label: "미용" },
-  { href: "/snacks", label: "간식" },
-  { href: "/reviews", label: "후기" },
   { href: "/hotel", label: "호텔" },
   { href: "/bunyang", label: "분양" },
+  { href: "/snacks", label: "간식" },
+  { href: "/reviews", label: "후기" },
 ] as const;

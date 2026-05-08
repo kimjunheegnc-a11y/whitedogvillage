@@ -10,9 +10,9 @@ const courses = [
 ];
 
 const breeds = [
-  { name: "소형 · 장모", tip: "일상 빗질 5분으로 엉킴 예방", src: stock.poodle },
-  { name: "중형 · 이중모", tip: "활동량에 맞춘 언더코트 케어", src: stock.shiba },
-  { name: "민감 피부", tip: "저자극 샴푸 · 시간 단축", src: stock.spaTowel },
+  { name: "소형견 · 치와와형", tip: "가벼운 빗(솔)으로 매일 3~5분, 엉킴 예방", src: stock.breedChihuahua },
+  { name: "소형견 · 말티즈형", tip: "눈물 자국·장모 관리, 저자극 샴푸 권장", src: stock.breedMaltese },
+  { name: "소형견 · 요크셔형", tip: "실크 모질 — 드라이 온도·시간 조절이 핵심", src: stock.breedYorkie },
 ];
 
 export default function GroomingPage() {
@@ -33,9 +33,15 @@ export default function GroomingPage() {
           </PlateCard>
           <PlateCard className="p-0 overflow-hidden">
             <div className="relative aspect-[4/3] w-full">
-              <Image src={stock.dogGroom} alt="미용 후" fill className="object-cover" sizes="(max-width:768px) 100vw, 50vw" />
+              <Image
+                src={stock.groomAfterShine}
+                alt="미용 후"
+                fill
+                className="object-cover"
+                sizes="(max-width:768px) 100vw, 50vw"
+              />
             </div>
-            <p className="px-5 py-3 text-sm font-medium text-muted">After — 클리핑 후</p>
+            <p className="px-5 py-3 text-sm font-medium text-muted">After — 클리핑·드라이 후</p>
           </PlateCard>
         </div>
       </PlateSection>
@@ -84,16 +90,21 @@ export default function GroomingPage() {
         title="미용사 소개"
         description="애견 미용 자격과 매장 위생 교육을 이수한 스태프가 케어합니다."
       >
-        <div className="grid items-center gap-8 md:grid-cols-[280px_1fr]">
-          <div className="relative aspect-square w-full max-w-xs overflow-hidden rounded-3xl border border-[var(--border)]">
-            <Image src={stock.groomStudio} alt="미용실" fill className="object-cover" sizes="280px" />
+        <div className="grid gap-6 md:grid-cols-2">
+          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl border border-[var(--border)]">
+            <Image src={stock.groomerStaff} alt="미용 케어 스태프" fill className="object-cover" sizes="(max-width:768px) 100vw, 50vw" />
           </div>
-          <PlateCard>
-            <p className="text-sm leading-relaxed text-muted">
-              스트레스를 줄이는 동선과 단계별 안내로 첫 방문 아이도 천천히 적응할 수 있게 돕습니다. 원하시는 스타일
-              레퍼런스 이미지를 지참해 주시면 길이·실루엣을 맞춰 상담합니다.
-            </p>
-          </PlateCard>
+          <div className="grid gap-4">
+            <div className="relative aspect-video w-full overflow-hidden rounded-3xl border border-[var(--border)]">
+              <Image src={stock.groomStudio} alt="미용 테이블" fill className="object-cover" sizes="(max-width:768px) 100vw, 50vw" />
+            </div>
+            <PlateCard>
+              <p className="text-sm leading-relaxed text-muted">
+                스트레스를 줄이는 동선과 단계별 안내로 첫 방문 아이도 천천히 적응할 수 있게 돕습니다. 원하시는 스타일
+                레퍼런스 이미지를 지참해 주시면 길이·실루엣을 맞춰 상담합니다.
+              </p>
+            </PlateCard>
+          </div>
         </div>
       </PlateSection>
 

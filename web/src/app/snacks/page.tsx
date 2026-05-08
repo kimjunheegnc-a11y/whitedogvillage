@@ -90,16 +90,25 @@ export default function SnacksPage() {
         title="직원 추천 · 할인"
         description="월별 프로모션은 매장 포스터와 챗봇 안내를 확인해 주세요."
       >
-        <div className="grid gap-4 md:grid-cols-[1fr_200px] md:items-center">
-          <PlateCard>
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl border border-[var(--border)]">
+            <Image
+              src={stock.staffPickSnacks}
+              alt="매장에서 고른 간식"
+              fill
+              className="object-cover"
+              sizes="(max-width:768px) 100vw, 50vw"
+            />
+          </div>
+          <PlateCard className="flex flex-col justify-center">
             <p className="text-sm leading-relaxed text-muted">
               &ldquo;입맛 까다로운 아이에게 부드러운 동결건조를 먼저 드려 보세요.&rdquo; — 매장 추천 픽 예시입니다. 실제 할인
               품목은 방문 시 확인 가능합니다.
             </p>
+            <div className="relative mt-4 aspect-[16/10] w-full overflow-hidden rounded-2xl border border-[var(--border)]">
+              <Image src={stock.snackBowl} alt="급여 준비" fill className="object-cover" sizes="(max-width:768px) 100vw, 40vw" />
+            </div>
           </PlateCard>
-          <div className="relative aspect-square w-full max-w-[200px] overflow-hidden rounded-3xl border border-[var(--border)]">
-            <Image src={stock.kibble} alt="" fill className="object-cover" sizes="200px" />
-          </div>
         </div>
       </PlateSection>
 
