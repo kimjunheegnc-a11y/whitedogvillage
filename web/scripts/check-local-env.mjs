@@ -13,7 +13,11 @@ const envPath = path.join(root, ".env.local");
 
 function normalizeAdminPasswordHash(raw) {
   if (!raw) return null;
-  let h = raw.replace(/^\uFEFF/, "").trim();
+  let h = raw
+    .replace(/^\uFEFF/, "")
+    .replace(/[\u200B-\u200D\uFEFF]/g, "")
+    .replace(/\r/g, "")
+    .trim();
   if ((h.startsWith('"') && h.endsWith('"')) || (h.startsWith("'") && h.endsWith("'"))) {
     h = h.slice(1, -1).trim();
   }
@@ -21,6 +25,19 @@ function normalizeAdminPasswordHash(raw) {
     h = h.replace(/\\\$/g, "$");
   }
   return h.length > 0 ? h : null;
+}
+
+function normalizeAdminPlainPassword(raw) {
+  if (!raw) return null;
+  let s = raw
+    .replace(/^\uFEFF/, "")
+    .replace(/[\u200B-\u200D\uFEFF]/g, "")
+    .replace(/\r/g, "")
+    .trim();
+  if ((s.startsWith('"') && s.endsWith('"')) || (s.startsWith("'") && s.endsWith("'"))) {
+    s = s.slice(1, -1).trim();
+  }
+  return s.length > 0 ? s : null;
 }
 
 /** 최소한의 .env 파싱 (따옴표·주석·앞뒤 공백 처리) */
@@ -82,12 +99,15 @@ if (isPlaceholderKey(env.SUPABASE_SERVICE_ROLE_KEY, PLACEHOLDER_SERVICE)) {
   errors.push("SUPABASE_SERVICE_ROLE_KEY — service_role 키를 넣으세요.");
 }
 
+const plain = normalizeAdminPlainPassword(env.ADMIN_PASSWORD);
 const hash = normalizeAdminPasswordHash(env.ADMIN_PASSWORD_HASH);
-if (!hash) {
-  errors.push("ADMIN_PASSWORD_HASH — 비어 있습니다. `npm run hash-password -- '0000'` 출력 한 줄을 넣으세요.");
-} else if (!/^\$2[aby]\$\d{2}\$/.test(hash)) {
-  errors.push("ADMIN_PASSWORD_HASH — bcrypt 형식이 아닌 것 같습니다 ($2b$10$...).");
-} else {
+if (!plain && !hash) {
+  errors.push(
+    "ADMIN_PASSWORD 또는 ADMIN_PASSWORD_HASH — 둘 중 하나는 필요합니다. 입장 게이트처럼 평문이면 ADMIN_PASSWORD=0000, bcrypt 는 hash-password 출력을 ADMIN_PASSWORD_HASH 에 넣으세요."
+  );
+} else if (!plain && hash && !/^\$2[aby]\$\d{2}\$/.test(hash)) {
+  errors.push("ADMIN_PASSWORD_HASH — bcrypt 형식이 아닙니다. 평문은 ADMIN_PASSWORD 에 두세요.");
+} else if (!plain && hash) {
   const testPwd = process.argv[2];
   if (testPwd) {
     if (!bcrypt.compareSync(testPwd, hash)) {
@@ -122,7 +142,7 @@ if (errors.length) {
 
 console.log("로컬 환경 변수 점검 결과: 통과\n");
 console.log("  ✓ Supabase URL / anon / service_role");
-console.log("  ✓ ADMIN_PASSWORD_HASH 형식");
+console.log(plain ? "  ✓ ADMIN_PASSWORD (평문)" : "  ✓ ADMIN_PASSWORD_HASH 형식");
 console.log("  ✓ ADMIN_SESSION_SECRET 길이 (32자 이상)");
 if (!process.argv[2]) {
   console.log("\n  (비밀번호 일치 여부까지 확인하려면: npm run check-env -- '0000')");
