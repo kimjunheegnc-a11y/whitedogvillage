@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { PlateCard, PlateSection } from "@/components/ui/PlateSection";
-import { KAKAO_PLACEHOLDER_HREF, MOBILE_PHONE } from "@/lib/constants";
+import { KAKAO_CHAT_HREF, MOBILE_PHONE } from "@/lib/constants";
 import { stock } from "@/lib/stock-photos";
 
 export default function HospitalPage() {
@@ -96,7 +96,7 @@ export default function HospitalPage() {
             병원 관련 문의 →
           </Link>
           {" · "}
-          <a href={KAKAO_PLACEHOLDER_HREF} className="text-sm font-semibold text-[var(--accent-dark)] hover:underline">
+          <a href={KAKAO_CHAT_HREF} className="text-sm font-semibold text-[var(--accent-dark)] hover:underline">
             카카오톡
           </a>
         </p>

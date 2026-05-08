@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ReservationForm } from "@/components/ReservationForm";
 import { ProseBlock } from "@/components/service/ProseBlock";
-import { KAKAO_PLACEHOLDER_HREF, MOBILE_PHONE } from "@/lib/constants";
+import { KAKAO_CHAT_HREF, MOBILE_PHONE } from "@/lib/constants";
 
 export default function GroomingBookPage() {
   return (
@@ -13,7 +13,7 @@ export default function GroomingBookPage() {
             {MOBILE_PHONE}
           </a>{" "}
           또는{" "}
-          <a href={KAKAO_PLACEHOLDER_HREF} className="font-bold text-[var(--accent-dark)] underline">
+          <a href={KAKAO_CHAT_HREF} className="font-bold text-[var(--accent-dark)] underline">
             카카오톡
           </a>
           도 함께 확인해 주세요.

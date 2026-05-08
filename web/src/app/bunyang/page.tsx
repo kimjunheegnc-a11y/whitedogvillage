@@ -2,7 +2,7 @@ import Link from "next/link";
 import { AdoptionPuppyCards } from "@/components/bunyang/AdoptionPuppyCards";
 import { PlateCard, PlateSection } from "@/components/ui/PlateSection";
 import { ADOPTION_PUPPIES } from "@/lib/adoption-puppies";
-import { KAKAO_PLACEHOLDER_HREF } from "@/lib/constants";
+import { KAKAO_CHAT_HREF } from "@/lib/constants";
 
 export default function BunyangPage() {
   return (
@@ -58,7 +58,7 @@ export default function BunyangPage() {
             <span className="text-white">상담·예약</span>
           </Link>
           <a
-            href={KAKAO_PLACEHOLDER_HREF}
+            href={KAKAO_CHAT_HREF}
             className="inline-flex rounded-2xl border border-[var(--border)] bg-white px-8 py-3.5 text-sm font-semibold hover:bg-[color-mix(in_srgb,white_92%,var(--accent-2))]"
           >
             카카오톡

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import {
   DEFAULT_PHONE,
-  KAKAO_PLACEHOLDER_HREF,
+  KAKAO_CHAT_HREF,
   MOBILE_PHONE,
   NAV,
   SITE_NAME,
@@ -60,7 +60,7 @@ export function SiteHeader({ phone }: { phone: string }) {
             </a>
           </div>
           <a
-            href={KAKAO_PLACEHOLDER_HREF}
+            href={KAKAO_CHAT_HREF}
             className="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-2 text-sm font-bold text-white shadow-sm hover:bg-accent-dark"
             title="카카오톡 채널 URL은 준비 후 교체"
           >
@@ -102,7 +102,7 @@ export function SiteHeader({ phone }: { phone: string }) {
               휴대폰 {MOBILE_PHONE}
             </a>
             <a
-              href={KAKAO_PLACEHOLDER_HREF}
+              href={KAKAO_CHAT_HREF}
               className="inline-flex items-center justify-center gap-2 rounded-full bg-accent py-3 font-bold text-white"
             >
               카카오톡 예약하기
@@ -125,7 +125,7 @@ export function MobileQuickBar({ phone }: { phone: string }) {
         전화
       </a>
       <a
-        href={KAKAO_PLACEHOLDER_HREF}
+        href={KAKAO_CHAT_HREF}
         className="flex flex-1 items-center justify-center rounded-xl bg-accent py-3 text-sm font-bold text-white shadow-sm"
       >
         카카오

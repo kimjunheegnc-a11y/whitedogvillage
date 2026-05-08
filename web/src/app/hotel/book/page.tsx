@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ReservationForm } from "@/components/ReservationForm";
 import { ProseBlock } from "@/components/service/ProseBlock";
-import { KAKAO_PLACEHOLDER_HREF, MOBILE_PHONE } from "@/lib/constants";
+import { KAKAO_CHAT_HREF, MOBILE_PHONE } from "@/lib/constants";
 
 export default function HotelBookPage() {
   return (
@@ -13,7 +13,7 @@ export default function HotelBookPage() {
             {MOBILE_PHONE}
           </a>{" "}
           또는{" "}
-          <a href={KAKAO_PLACEHOLDER_HREF} className="font-bold text-[var(--accent-dark)] underline">
+          <a href={KAKAO_CHAT_HREF} className="font-bold text-[var(--accent-dark)] underline">
             카카오톡
           </a>
           으로도 연락 주세요. 우측 하단 <strong>+ 챗봇</strong> 예약도 동일하게 접수됩니다.

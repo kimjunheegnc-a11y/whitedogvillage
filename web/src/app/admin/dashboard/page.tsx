@@ -46,12 +46,12 @@ export default async function AdminDashboardPage() {
   }
 
   const { data: media } = await sb.from("media_assets").select("*").order("sort_order", { ascending: true });
-  const { data: reservations } = await sb
+  const { data: reservations, error: reservationsError } = await sb
     .from("reservations")
     .select("*")
     .order("created_at", { ascending: false })
     .limit(50);
-  const { data: inquiries } = await sb
+  const { data: inquiries, error: inquiriesError } = await sb
     .from("inquiries")
     .select("*")
     .order("created_at", { ascending: false })
@@ -87,6 +87,25 @@ export default async function AdminDashboardPage() {
           <LogoutButton />
         </div>
       </div>
+
+      {reservationsError || inquiriesError ? (
+        <div className="mt-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-900">
+          <p className="font-bold">예약·문의 목록을 불러오지 못했습니다</p>
+          {reservationsError ? (
+            <p className="mt-2 break-all font-mono text-[11px]">예약: {reservationsError.message}</p>
+          ) : null}
+          {inquiriesError ? (
+            <p className="mt-2 break-all font-mono text-[11px]">문의: {inquiriesError.message}</p>
+          ) : null}
+          <p className="mt-3 text-xs leading-relaxed text-red-950/90">
+            흔한 원인: Supabase에 <code className="rounded bg-white/70 px-1">reservations</code> 테이블이 없음(
+            <code className="rounded bg-white/70 px-1">web/supabase/SUPABASE_ALL_IN_ONE.sql</code> 미실행), 또는 Vercel의
+            Supabase URL/키가 예약 접수 시점과 다른 프로젝트를 가리킴. 레포의{" "}
+            <code className="rounded bg-white/70 px-1">web/supabase/DIAGNOSTIC_RESERVATIONS.sql</code> 을 SQL Editor에서
+            실행해 보세요.
+          </p>
+        </div>
+      ) : null}
 
       <section className="mt-10 rounded-3xl bg-white p-6 shadow ring-1 ring-pink-100">
         <h2 className="text-lg font-bold text-pink-700">텍스트 콘텐츠</h2>
@@ -166,6 +185,8 @@ export default async function AdminDashboardPage() {
                 <th className="py-2 pr-4">유형</th>
                 <th className="py-2 pr-4">이름</th>
                 <th className="py-2 pr-4">연락처</th>
+                <th className="py-2 pr-4 max-w-[10rem]">반려 정보</th>
+                <th className="py-2 pr-4 max-w-[8rem]">문의·요청</th>
                 <th className="py-2 pr-4">상태</th>
               </tr>
             </thead>
@@ -178,6 +199,16 @@ export default async function AdminDashboardPage() {
                   <td className="py-2 pr-4">{r.type}</td>
                   <td className="py-2 pr-4">{r.customer_name}</td>
                   <td className="py-2 pr-4">{r.phone}</td>
+                  <td className="max-w-[10rem] py-2 pr-4 text-xs text-muted">
+                    <span className="line-clamp-2" title={String(r.pet_info ?? "")}>
+                      {String(r.pet_info ?? "").trim() || "—"}
+                    </span>
+                  </td>
+                  <td className="max-w-[8rem] py-2 pr-4 text-xs text-muted">
+                    <span className="line-clamp-2" title={String(r.notes ?? "")}>
+                      {String(r.notes ?? "").trim() || "—"}
+                    </span>
+                  </td>
                   <td className="py-2 pr-4">
                     <form action={updateReservationFromForm} className="flex flex-col gap-1">
                       <input type="hidden" name="id" value={r.id} />

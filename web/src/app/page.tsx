@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { DEFAULT_PHONE, KAKAO_PLACEHOLDER_HREF, MOBILE_PHONE } from "@/lib/constants";
+import { DEFAULT_PHONE, KAKAO_CHAT_HREF, MOBILE_PHONE } from "@/lib/constants";
 import { loadContentMap } from "@/lib/content-load";
 import { asText } from "@/lib/json-content";
 import { stock } from "@/lib/stock-photos";
@@ -26,7 +26,7 @@ export default async function HomePage() {
             <p className="mt-5 max-w-md text-[15px] leading-relaxed text-muted">{heroSub}</p>
             <div className="mt-8 flex flex-wrap gap-3">
               <a
-                href={KAKAO_PLACEHOLDER_HREF}
+                href={KAKAO_CHAT_HREF}
                 className="inline-flex items-center justify-center rounded-2xl bg-[#FEE500] px-5 py-3.5 text-sm font-bold text-[#191919] shadow-sm ring-1 ring-black/5 hover:brightness-[0.97]"
               >
                 카카오톡
