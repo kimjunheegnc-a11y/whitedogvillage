@@ -5,7 +5,11 @@
  */
 export function normalizeAdminPasswordHash(raw: string | undefined): string | null {
   if (!raw) return null;
-  let h = raw.replace(/^\uFEFF/, "").trim();
+  let h = raw
+    .replace(/^\uFEFF/, "")
+    .replace(/[\u200B-\u200D\uFEFF]/g, "")
+    .replace(/\r/g, "")
+    .trim();
   if (
     (h.startsWith('"') && h.endsWith('"')) ||
     (h.startsWith("'") && h.endsWith("'"))
@@ -17,3 +21,9 @@ export function normalizeAdminPasswordHash(raw: string | undefined): string | nu
   }
   return h.length > 0 ? h : null;
 }
+
+/** bcrypt 해시 한 줄인지 (평문 0000 을 잘못 넣은 경우 구분) */
+export function looksLikeBcryptHash(s: string): boolean {
+  return /^\$2[aby]\$\d{2}\$/.test(s) && s.length >= 20;
+}
+
