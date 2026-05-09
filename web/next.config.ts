@@ -12,6 +12,12 @@ const remotePatterns: NonNullable<
     hostname: "images.unsplash.com",
     pathname: "/**",
   },
+  /** Supabase Storage — 빌드 시 URL이 비어 있어도 갤러리 등 next/image 가 동작하도록 */
+  {
+    protocol: "https",
+    hostname: "*.supabase.co",
+    pathname: "/storage/v1/object/public/**",
+  },
 ];
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;

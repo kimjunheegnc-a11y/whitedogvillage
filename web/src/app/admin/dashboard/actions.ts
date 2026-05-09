@@ -22,6 +22,7 @@ function revalidatePublic() {
   revalidatePath("/hospital");
   revalidatePath("/snacks");
   revalidatePath("/reviews");
+  revalidatePath("/admin/dashboard");
 }
 
 export async function upsertContentBlock(key: string, value: unknown) {

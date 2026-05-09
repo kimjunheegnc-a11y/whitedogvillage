@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -153,13 +152,23 @@ export default async function AdminDashboardPage() {
           {(media ?? []).map((m) => (
             <div key={m.id} className="rounded-2xl border border-pink-100 p-3">
               <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-pink-50">
-                <Image
-                  src={publicMediaUrl(m.path)}
-                  alt={m.alt ?? ""}
-                  fill
-                  className="object-cover"
-                  sizes="200px"
-                />
+                {(() => {
+                  const src = publicMediaUrl(m.path);
+                  return src ? (
+                    {/* 관리자만 보는 썸네일 — next/image 호스트 설정 누락 시 전체 대시보드가 500 나는 것을 막음 */}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={src}
+                      alt={m.alt ?? ""}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-full min-h-[7rem] items-center justify-center px-2 text-center text-[11px] text-muted">
+                      이미지 주소를 만들 수 없습니다. Vercel에{" "}
+                      <code className="mx-0.5 rounded bg-white/80 px-1">NEXT_PUBLIC_SUPABASE_URL</code> 후 재배포하세요.
+                    </div>
+                  );
+                })()}
               </div>
               <p className="mt-2 truncate text-xs text-muted">{m.path}</p>
               <form action={deleteMediaAsset.bind(null, m.id)} className="mt-2">
