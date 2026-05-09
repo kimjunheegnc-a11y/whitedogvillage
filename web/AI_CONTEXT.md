@@ -65,6 +65,11 @@
 - **`NEXT_PUBLIC_SUPABASE_URL`:** 반드시 `https://xxxx.supabase.co` **오리진만** (끝에 `/rest/v1` 붙이면 “Invalid path specified in request URL” 등 오류). 코드에서 `normalizeSupabaseProjectUrl()`로 보정함 (`src/lib/supabase/normalize-project-url.ts`).
 - 클라이언트 검증·서버 truncate·전화 정규화: `src/lib/reservation-input.ts`.
 
+**예약이 “안 된다”고 느낄 때 흔한 오해**
+
+- SQL 진단의 **`inquiry_count`** 는 **문의(`inquiries`)** 건수입니다. **예약(분양·호텔·미용)** 만 테스트했다면 `0`이어도 정상일 수 있습니다. **`reservation_count`** 와 `public.reservations` 최근 행을 확인하세요. 진단 파일: [`supabase/DIAGNOSTIC_RESERVATIONS.sql`](./supabase/DIAGNOSTIC_RESERVATIONS.sql).
+- Vercel에 **`SUPABASE_SERVICE_ROLE_KEY`에 anon 키를 잘못 넣은 경우** insert가 막히거나 실패할 수 있습니다. Supabase → **Project Settings → API**에서 **service_role** `secret`만 해당 변수에 넣었는지 확인하세요.
+
 ### 챗봇 (`src/components/ChatbotWidget.tsx`)
 
 - 흐름: 상담 분야 → 강아지/고양이 → (강아지면) 체급 → 나이 → 성별·중성화 → 보호자명·전화·아이 이름·희망일시·문의(최소 글자 수 등).

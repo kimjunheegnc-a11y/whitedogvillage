@@ -35,7 +35,8 @@ Supabase 대시보드 → **SQL Editor** → New query → 아래 파일 **전�
 
 > 참고: `migrations/001_initial.sql`은 동일 스키마의 분할본입니다. **새로 셋업할 때는 `SUPABASE_ALL_IN_ONE.sql`만** 쓰면 됩니다.
 
-예약이 어드민에 안 보일 때: [`web/supabase/DIAGNOSTIC_RESERVATIONS.sql`](web/supabase/DIAGNOSTIC_RESERVATIONS.sql) 을 SQL Editor에서 실행.
+예약이 어드민에 안 보일 때: [`web/supabase/DIAGNOSTIC_RESERVATIONS.sql`](web/supabase/DIAGNOSTIC_RESERVATIONS.sql) 을 SQL Editor에서 실행하세요.  
+**`inquiry_count`는 문의 테이블**이고, **예약은 `reservation_count`·`reservations` 최근 행**을 보세요.
 
 ## 3. 관리자 비밀번호
 
